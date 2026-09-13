@@ -1,0 +1,70 @@
+{
+  "para": {
+    "ona": "Anna",
+    "on": "Jan"
+  },
+  "data": "2027-06-19T15:00:00",
+  "motto": "Z radością zapraszamy Was na nasz ślub i wesele!",
+  "wstep": "Poniżej znajdziecie wszystkie najważniejsze informacje. Strona jest na bieżąco aktualizowana, więc warto zajrzeć tu jeszcze raz przed uroczystością.",
+
+  "slub": {
+    "tytul": "Ceremonia",
+    "godzina": "15:00",
+    "miejsce": "Kościół pw. św. Anny",
+    "adres": "ul. Kościelna 1, 00-001 Warszawa",
+    "opis": "Prosimy o przybycie ok. 15 minut wcześniej. Parking znajduje się za kościołem."
+  },
+
+  "wesele": {
+    "tytul": "Wesele",
+    "godzina": "17:00",
+    "miejsce": "Dwór pod Lipami",
+    "adres": "Lipowa 10, 05-800 Pruszków",
+    "opis": "Bawimy się do białego rana. Dla dzieci przewidziany kącik zabaw z animatorką."
+  },
+
+  "plan": [
+    { "godzina": "15:00", "opis": "Ceremonia zaślubin" },
+    { "godzina": "16:15", "opis": "Życzenia przed kościołem" },
+    { "godzina": "17:00", "opis": "Powitanie gości chlebem i solą, obiad" },
+    { "godzina": "18:30", "opis": "Pierwszy taniec" },
+    { "godzina": "22:00", "opis": "Tort" },
+    { "godzina": "00:00", "opis": "Oczepiny" }
+  ],
+
+  "rsvp": {
+    "termin": "2027-05-15",
+    "tekst": "Prosimy o potwierdzenie obecności (oraz informację o diecie wegetariańskiej / alergiach).",
+    "telefon": "+48 600 000 000",
+    "email": "anna.i.jan@example.com",
+    "link": ""
+  },
+
+  "nocleg": [
+    {
+      "nazwa": "Hotel Lipowy",
+      "adres": "Lipowa 12, 05-800 Pruszków",
+      "telefon": "+48 22 000 00 00",
+      "uwagi": "Na hasło „wesele Anny i Jana” zniżka 15%. Rezerwacja do 1 maja."
+    }
+  ],
+
+  "transport": "O godz. 16:30 spod kościoła odjeżdża autokar do sali weselnej. Powrót: autokary o 2:00 i 4:00 do centrum Warszawy.",
+
+  "dresscode": "Elegancki, bez ograniczeń kolorystycznych. Uroczystość odbywa się częściowo w ogrodzie — warto pomyśleć o wygodnych butach.",
+
+  "prezenty": "Najpiękniejszym prezentem będzie Wasza obecność. Jeśli chcecie nas obdarować, zamiast kwiatów ucieszy nas los na loterię lub książka z dedykacją.",
+
+  "faq": [
+    { "pytanie": "Czy mogę przyjść z dzieckiem?", "odpowiedz": "Oczywiście! Prosimy tylko o informację przy potwierdzaniu obecności." },
+    { "pytanie": "Czy będzie parking?", "odpowiedz": "Tak, bezpłatny parking przy kościele i przy sali weselnej." },
+    { "pytanie": "Czy będą opcje wegetariańskie?", "odpowiedz": "Tak — daj nam znać w RSVP, a kucharz zadba o resztę." }
+  ],
+
+  "kontakt": [
+    { "rola": "Świadkowa", "imie": "Kasia", "telefon": "+48 601 000 000" },
+    { "rola": "Świadek", "imie": "Tomek", "telefon": "+48 602 000 000" }
+  ],
+
+  "stopka": "Do zobaczenia! Anna i Jan"
+}

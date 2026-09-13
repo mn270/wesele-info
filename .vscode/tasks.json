@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Podgląd lokalny",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "http.server", "8080"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Serwuje stronę pod http://localhost:8080 (Ctrl+C aby zatrzymać)"
+    },
+    {
+      "label": "Generuj QR",
+      "type": "shell",
+      "command": "python",
+      "args": ["tools/make_qr.py", "${input:siteUrl}"],
+      "problemMatcher": [],
+      "detail": "Tworzy qr/wesele-qr.svg i .png z podanego adresu strony"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "siteUrl",
+      "type": "promptString",
+      "description": "Publiczny adres strony (np. https://login.github.io/wesele-info/)",
+      "default": "https://mn270.github.io/wesele-info/"
+    }
+  ]
+}
