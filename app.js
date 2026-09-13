@@ -45,12 +45,9 @@
   function buildIcs(c, start) {
     const end = new Date(start.getTime() + 10 * 60 * 60 * 1000);
     const title = `Ślub ${c.para.ona} i ${c.para.on}`;
-    const location = c.slub && c.slub.adres ? `${c.slub.miejsce || ""}, ${c.slub.adres}` : "";
-    const description = [
-      c.slub && c.slub.miejsce ? `Ceremonia: ${c.slub.godzina || ""} ${c.slub.miejsce}` : "",
-      c.wesele && c.wesele.miejsce ? `Wesele: ${c.wesele.godzina || ""} ${c.wesele.miejsce}, ${c.wesele.adres || ""}` : "",
-      window.location.href,
-    ].filter(Boolean).join("\n");
+    const m = c.miejsce || {};
+    const location = has(m.adres) ? [m.nazwa, m.adres].filter(has).join(", ") : "";
+    const description = [m.opis || "", window.location.href].filter(Boolean).join("\n");
     return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wesele-info//PL", "BEGIN:VEVENT",
       "UID:" + icsStamp(start) + "@wesele-info",
       "DTSTAMP:" + icsStamp(new Date()) ,
@@ -69,19 +66,45 @@
     names.append(c.para.ona, el("span", { class: "amp", text: "&" }), c.para.on);
     document.title = `${c.para.ona} & ${c.para.on} — informacje weselne`;
 
-    const start = parseLocal(c.data);
-    if (start) $("date").textContent = DATE_FMT.format(start);
+    const sur = $("surnames");
+    if (has(c.para.ona_nazwisko) || has(c.para.on_nazwisko)) {
+      sur.append(
+        el("span", { text: c.para.ona_nazwisko || "" }),
+        has(c.para.ona_nazwisko) && has(c.para.on_nazwisko) ? el("span", { class: "sep", text: "·" }) : "",
+        el("span", { text: c.para.on_nazwisko || "" }),
+      );
+    } else sur.hidden = true;
+
+    if (has(c.zaproszenie)) $("eyebrow").textContent = c.zaproszenie;
+
+    if (has(c.obraz)) {
+      const fig = $("figure");
+      fig.hidden = false;
+      $("image").src = c.obraz;
+      $("image").alt = c.obraz_podpis || "";
+      if (has(c.obraz_podpis)) $("caption").textContent = c.obraz_podpis; else $("caption").hidden = true;
+    }
+
     if (has(c.motto)) $("motto").textContent = c.motto; else $("motto").hidden = true;
 
-    if (start) renderCountdown(start);
+    const start = parseLocal(c.data);
+    if (start) {
+      const d = $("date");
+      d.append(
+        `${pad(start.getDate())}.${pad(start.getMonth() + 1)}.${start.getFullYear()}`,
+        el("span", { class: "bar", "aria-hidden": "true" }),
+        `${pad(start.getHours())}:${pad(start.getMinutes())}`,
+      );
+      $("weekday").textContent = DATE_FMT.format(start);
+      renderCountdown(start);
+    }
 
     const actions = $("hero-actions");
     if (start) {
       const blob = new Blob([buildIcs(c, start)], { type: "text/calendar;charset=utf-8" });
       actions.append(el("a", { class: "btn btn--primary", href: URL.createObjectURL(blob), download: "slub.ics", text: "Dodaj do kalendarza" }));
     }
-    if (c.slub && has(c.slub.adres)) actions.append(el("a", { class: "btn", href: mapsUrl(c.slub.adres), target: "_blank", rel: "noopener", text: "Mapa: ceremonia" }));
-    if (c.wesele && has(c.wesele.adres)) actions.append(el("a", { class: "btn", href: mapsUrl(c.wesele.adres), target: "_blank", rel: "noopener", text: "Mapa: wesele" }));
+    if (c.miejsce && has(c.miejsce.adres)) actions.append(el("a", { class: "btn", href: mapsUrl([c.miejsce.nazwa, c.miejsce.adres].filter(has).join(", ")), target: "_blank", rel: "noopener", text: "Jak dojechać" }));
   }
 
   function renderCountdown(start) {
@@ -108,15 +131,12 @@
     return el("section", { class: "section" }, [el("h2", { class: "section__title", text: title }), body]);
   }
 
-  function placeCard(p, fallbackTitle) {
-    const card = el("div", { class: "card" }, [
-      el("h3", { text: p.tytul || fallbackTitle }),
-      has(p.godzina) || has(p.miejsce) ? el("p", { class: "meta" }, [has(p.godzina) ? el("strong", { text: p.godzina }) : "", has(p.godzina) && has(p.miejsce) ? " · " : "", p.miejsce || ""]) : "",
-      has(p.adres) ? el("p", { class: "meta", text: p.adres }) : "",
-      has(p.opis) ? el("p", { text: p.opis }) : "",
-    ]);
-    if (has(p.adres)) card.append(el("div", { class: "actions" }, el("a", { class: "btn", href: mapsUrl(p.adres), target: "_blank", rel: "noopener", text: "Pokaż na mapie" })));
-    return card;
+  /** Zwraca adres URL tylko jeśli ma bezpieczny schemat (http/https/mailto/tel/sms). */
+  function safeHref(u) {
+    try {
+      const url = new URL(String(u), window.location.href);
+      return ["http:", "https:", "mailto:", "tel:", "sms:"].includes(url.protocol) ? url.href : null;
+    } catch { return null; }
   }
 
   function renderMain(c) {
@@ -125,29 +145,39 @@
 
     if (has(c.wstep)) app.append(el("p", { class: "section", text: c.wstep }));
 
-    const places = [];
-    if (c.slub && (has(c.slub.miejsce) || has(c.slub.adres))) places.push(placeCard(c.slub, "Ceremonia"));
-    if (c.wesele && (has(c.wesele.miejsce) || has(c.wesele.adres))) places.push(placeCard(c.wesele, "Wesele"));
-    if (places.length) app.append(section("Gdzie i kiedy", el("div", { class: "grid-2" }, places)));
+    /* Jedno miejsce — ślub i wesele pod tym samym adresem; mapa jest w nagłówku, więc tu jej nie dublujemy. */
+    const m = c.miejsce;
+    if (m && (has(m.nazwa) || has(m.adres) || has(m.opis))) {
+      app.append(section(m.tytul || "Miejsce", el("div", { class: "card card--single" }, [
+        has(m.nazwa) || has(m.adres) ? el("p", { class: "meta" }, [has(m.nazwa) ? el("strong", { text: m.nazwa }) : "", has(m.nazwa) && has(m.adres) ? " · " : "", m.adres || ""]) : "",
+        has(m.opis) ? el("p", { text: m.opis }) : "",
+      ])));
+    }
 
     if (has(c.plan)) {
       app.append(section("Plan dnia", el("div", { class: "card" }, el("ul", { class: "timeline" },
         c.plan.map((p) => el("li", null, [el("time", { text: p.godzina }), el("span", { text: p.opis })]))))));
     }
 
-    if (c.rsvp && (has(c.rsvp.telefon) || has(c.rsvp.email) || has(c.rsvp.link) || has(c.rsvp.tekst))) {
-      const r = c.rsvp;
+    /* RSVP „jednym kliknięciem”: linki do formularza (Google Forms z gotową odpowiedzią),
+       a gdy ich nie ma — SMS z gotowym tekstem / telefon / e-mail. */
+    const r = c.rsvp;
+    if (r && (has(r.link_tak) || has(r.link_nie) || has(r.link) || has(r.telefon) || has(r.email) || has(r.tekst))) {
       const termin = has(r.termin) ? parseLocal(r.termin) : null;
-      const actions = el("div", { class: "actions" }, [
-        has(r.link) ? el("a", { class: "btn btn--primary", href: r.link, target: "_blank", rel: "noopener", text: "Wypełnij formularz" }) : "",
-        has(r.telefon) ? el("a", { class: "btn", href: telHref(r.telefon), text: "Zadzwoń: " + r.telefon }) : "",
-        has(r.telefon) ? el("a", { class: "btn", href: "sms:" + telHref(r.telefon).slice(4), text: "Napisz SMS" }) : "",
-        has(r.email) ? el("a", { class: "btn", href: "mailto:" + r.email, text: r.email }) : "",
-      ]);
-      app.append(section("Potwierdzenie obecności", el("div", { class: "card" }, [
+      const smsBody = has(r.sms_tekst) ? "?body=" + encodeURIComponent(r.sms_tekst) : "";
+      const btns = [];
+      if (has(r.link_tak)) btns.push(el("a", { class: "btn btn--primary", href: safeHref(r.link_tak), target: "_blank", rel: "noopener", text: "Będę!" }));
+      if (has(r.link_nie)) btns.push(el("a", { class: "btn", href: safeHref(r.link_nie), target: "_blank", rel: "noopener", text: "Niestety nie dam rady" }));
+      if (!btns.length && has(r.link)) btns.push(el("a", { class: "btn btn--primary", href: safeHref(r.link), target: "_blank", rel: "noopener", text: "Potwierdź obecność" }));
+      if (has(r.telefon)) {
+        btns.push(el("a", { class: btns.length ? "btn" : "btn btn--primary", href: "sms:" + telHref(r.telefon).slice(4) + smsBody, text: "Potwierdź SMS-em" }));
+        btns.push(el("a", { class: "btn", href: telHref(r.telefon), text: "Zadzwoń" }));
+      }
+      if (has(r.email)) btns.push(el("a", { class: "btn", href: "mailto:" + r.email + "?subject=" + encodeURIComponent("Potwierdzenie obecności") + (has(r.sms_tekst) ? "&body=" + encodeURIComponent(r.sms_tekst) : ""), text: "Napisz e-mail" }));
+      app.append(section("Potwierdzenie obecności", el("div", { class: "card card--single" }, [
         termin ? el("p", { class: "meta" }, ["Prosimy o odpowiedź do ", el("strong", { text: DATE_FMT.format(termin) })]) : "",
         has(r.tekst) ? el("p", { text: r.tekst }) : "",
-        actions,
+        btns.length ? el("div", { class: "actions actions--center" }, btns) : "",
       ])));
     }
 
@@ -159,19 +189,24 @@
           has(n.uwagi) ? el("p", { text: n.uwagi }) : "",
         ]);
         const acts = el("div", { class: "actions" }, [
-          has(n.adres) ? el("a", { class: "btn", href: mapsUrl(n.adres), target: "_blank", rel: "noopener", text: "Mapa" }) : "",
+          has(n.adres) && !(c.miejsce && n.adres === c.miejsce.adres) ? el("a", { class: "btn", href: mapsUrl(n.adres), target: "_blank", rel: "noopener", text: "Mapa" }) : "",
           has(n.telefon) ? el("a", { class: "btn", href: telHref(n.telefon), text: n.telefon }) : "",
-          has(n.link) ? el("a", { class: "btn", href: n.link, target: "_blank", rel: "noopener", text: "Strona" }) : "",
+          has(n.link) && safeHref(n.link) ? el("a", { class: "btn", href: safeHref(n.link), target: "_blank", rel: "noopener", text: "Strona" }) : "",
         ]);
         if (acts.childElementCount) card.append(acts);
         return card;
       }))));
     }
 
-    const simple = [["Transport", c.transport], ["Dress code", c.dresscode], ["Prezenty", c.prezenty]].filter(([, v]) => has(v));
-    if (simple.length) {
-      app.append(section("Praktyczne informacje", el("div", { class: "grid-2" },
-        simple.map(([t, v]) => el("div", { class: "card" }, [el("h3", { text: t }), el("p", { text: v })])))));
+    /* Praktyczne informacje — dowolna lista; pozycje z pustym tekstem są pomijane. */
+    const prakt = (c.praktyczne || []).filter((p) => has(p.tekst));
+    if (prakt.length) {
+      app.append(section("Praktyczne informacje", el("div", { class: "grid-2" }, prakt.map((p) => {
+        const card = el("div", { class: "card" }, [el("h3", { text: p.tytul }), el("p", { text: p.tekst })]);
+        const href = has(p.link) ? safeHref(p.link) : null;
+        if (href) card.append(el("div", { class: "actions" }, el("a", { class: "btn", href, target: "_blank", rel: "noopener", text: p.link_tekst || "Więcej" })));
+        return card;
+      }))));
     }
 
     if (has(c.faq)) {

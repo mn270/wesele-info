@@ -5,26 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Informacje weselne</title>
-  <meta name="description" content="Najważniejsze informacje dla gości weselnych: miejsce, godzina, plan dnia, RSVP.">
+  <meta name="description" content="Najważniejsze informacje dla gości weselnych: miejsce, godzina, plan dnia, potwierdzenie przybycia, noclegi.">
+  <meta name="theme-color" content="#ffffff">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allison&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero" id="hero">
-    <p class="hero__eyebrow">Zaproszenie</p>
-    <h1 class="hero__names" id="names">…</h1>
-    <p class="hero__date" id="date"></p>
-    <p class="hero__motto" id="motto"></p>
-    <div class="countdown" id="countdown" hidden></div>
-    <div class="hero__actions" id="hero-actions"></div>
-  </header>
+  <div class="frame">
+    <header class="hero" id="hero">
+      <h1 class="hero__names" id="names" aria-label="Para młoda">…</h1>
+      <p class="hero__surnames" id="surnames"></p>
+      <p class="hero__eyebrow" id="eyebrow">z radością zapraszają</p>
+      <figure class="hero__figure" id="figure" hidden>
+        <figcaption class="hero__caption" id="caption"></figcaption>
+        <img class="hero__image" id="image" alt="" decoding="async">
+      </figure>
+      <p class="hero__lead" id="motto"></p>
+      <p class="hero__date" id="date"></p>
+      <p class="hero__weekday" id="weekday"></p>
+      <div class="countdown" id="countdown" hidden></div>
+      <div class="hero__actions" id="hero-actions"></div>
+    </header>
 
-  <main id="app" class="container">
-    <p class="loading" id="loading">Wczytywanie…</p>
-  </main>
+    <main id="app" class="container">
+      <p class="loading" id="loading">Wczytywanie…</p>
+    </main>
 
-  <footer class="footer" id="footer"></footer>
+    <footer class="footer" id="footer"></footer>
+  </div>
 
   <noscript>
     <p class="loading">Ta strona wymaga włączonego JavaScriptu.</p>

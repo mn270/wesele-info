@@ -1,70 +1,72 @@
 {
   "para": {
-    "ona": "Anna",
-    "on": "Jan"
+    "ona": "Agnieszka",
+    "ona_nazwisko": "Kuczkowska",
+    "on": "Marcin",
+    "on_nazwisko": "Januszewicz"
   },
-  "data": "2027-06-19T15:00:00",
-  "motto": "Z radością zapraszamy Was na nasz ślub i wesele!",
-  "wstep": "Poniżej znajdziecie wszystkie najważniejsze informacje. Strona jest na bieżąco aktualizowana, więc warto zajrzeć tu jeszcze raz przed uroczystością.",
+  "zaproszenie": "z radością zapraszają",
+  "obraz": "img/palac.png",
+  "obraz_podpis": "Pałac Romantyczny w Turznie",
+  "data": "2027-08-21T15:00:00",
+  "motto": "na uroczystość zaślubin oraz wesele, które odbędą się w dniu",
+  "wstep": "W trosce o Wasz komfort zebraliśmy tu wszystkie dodatkowe informacje — m.in. o noclegach i planie uroczystości. Strona będzie uzupełniana, warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
 
-  "slub": {
-    "tytul": "Ceremonia",
-    "godzina": "15:00",
-    "miejsce": "Kościół pw. św. Anny",
-    "adres": "ul. Kościelna 1, 00-001 Warszawa",
-    "opis": "Prosimy o przybycie ok. 15 minut wcześniej. Parking znajduje się za kościołem."
-  },
-
-  "wesele": {
-    "tytul": "Wesele",
-    "godzina": "17:00",
-    "miejsce": "Dwór pod Lipami",
-    "adres": "Lipowa 10, 05-800 Pruszków",
-    "opis": "Bawimy się do białego rana. Dla dzieci przewidziany kącik zabaw z animatorką."
+  "miejsce": {
+    "tytul": "Ceremonia i wesele",
+    "nazwa": "Pałac Romantyczny w Turznie",
+    "adres": "Toruńska 1, 87-148 Turzno",
+    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie Pałacu Romantycznego w Turznie. Zaraz po ceremonii, w tym samym miejscu, zapraszamy na przyjęcie weselne — nie trzeba się nigdzie przemieszczać ani szukać parkingu po raz drugi."
   },
 
   "plan": [
-    { "godzina": "15:00", "opis": "Ceremonia zaślubin" },
-    { "godzina": "16:15", "opis": "Życzenia przed kościołem" },
-    { "godzina": "17:00", "opis": "Powitanie gości chlebem i solą, obiad" },
-    { "godzina": "18:30", "opis": "Pierwszy taniec" },
-    { "godzina": "22:00", "opis": "Tort" },
-    { "godzina": "00:00", "opis": "Oczepiny" }
+    { "godzina": "15:00", "opis": "Ceremonia zaślubin w kaplicy pałacowej" }
   ],
 
   "rsvp": {
-    "termin": "2027-05-15",
-    "tekst": "Prosimy o potwierdzenie obecności (oraz informację o diecie wegetariańskiej / alergiach).",
-    "telefon": "+48 600 000 000",
-    "email": "anna.i.jan@example.com",
-    "link": ""
+    "termin": "2027-04-30",
+    "tekst": "Uprzejmie prosimy o potwierdzenie przybycia do 30.04.2027 r. Dajcie nam też znać o diecie wegetariańskiej lub alergiach.",
+    "link_tak": "",
+    "link_nie": "",
+    "telefon": "",
+    "sms_tekst": "Potwierdzam obecność na ślubie Agnieszki i Marcina 21.08.2027 r. Imię i nazwisko: ",
+    "email": ""
   },
 
   "nocleg": [
     {
-      "nazwa": "Hotel Lipowy",
-      "adres": "Lipowa 12, 05-800 Pruszków",
-      "telefon": "+48 22 000 00 00",
-      "uwagi": "Na hasło „wesele Anny i Jana” zniżka 15%. Rezerwacja do 1 maja."
+      "nazwa": "Pałac Romantyczny w Turznie",
+      "adres": "Toruńska 1, 87-148 Turzno",
+      "telefon": "",
+      "link": "",
+      "uwagi": "Szczegóły dotyczące noclegów podamy wkrótce."
     }
   ],
 
-  "transport": "O godz. 16:30 spod kościoła odjeżdża autokar do sali weselnej. Powrót: autokary o 2:00 i 4:00 do centrum Warszawy.",
-
-  "dresscode": "Elegancki, bez ograniczeń kolorystycznych. Uroczystość odbywa się częściowo w ogrodzie — warto pomyśleć o wygodnych butach.",
-
-  "prezenty": "Najpiękniejszym prezentem będzie Wasza obecność. Jeśli chcecie nas obdarować, zamiast kwiatów ucieszy nas los na loterię lub książka z dedykacją.",
+  "praktyczne": [
+    {
+      "tytul": "Prezenty",
+      "tekst": "Wasza obecność to dla nas największy prezent! Jeśli jednak zechcecie podarować nam coś więcej, będziemy wdzięczni za wkład w spełnienie naszych marzeń — zamiast prezentu koperta, a zamiast kwiatów zdrapka.",
+      "link": "",
+      "link_tekst": ""
+    },
+    { "tytul": "Dojazd i parking", "tekst": "", "link": "", "link_tekst": "" },
+    { "tytul": "Dress code", "tekst": "", "link": "", "link_tekst": "" },
+    { "tytul": "Poprawiny", "tekst": "", "link": "", "link_tekst": "" },
+    { "tytul": "Zdjęcia", "tekst": "", "link": "", "link_tekst": "" },
+    { "tytul": "Muzyka", "tekst": "", "link": "", "link_tekst": "" }
+  ],
 
   "faq": [
-    { "pytanie": "Czy mogę przyjść z dzieckiem?", "odpowiedz": "Oczywiście! Prosimy tylko o informację przy potwierdzaniu obecności." },
-    { "pytanie": "Czy będzie parking?", "odpowiedz": "Tak, bezpłatny parking przy kościele i przy sali weselnej." },
-    { "pytanie": "Czy będą opcje wegetariańskie?", "odpowiedz": "Tak — daj nam znać w RSVP, a kucharz zadba o resztę." }
+    { "pytanie": "Czy mogę przyjść z dzieckiem?", "odpowiedz": "Ten wyjątkowy wieczór spędzimy tylko w gronie dorosłych — mamy nadzieję, że odpoczniecie od codziennych obowiązków." },
+    { "pytanie": "Czy ceremonia i wesele są w tym samym miejscu?", "odpowiedz": "Tak — ślub odbywa się w kaplicy na terenie pałacu, a wesele w jego salach. Wszystko pod jednym adresem: Toruńska 1, Turzno." },
+    { "pytanie": "Co zamiast kwiatów i prezentów?", "odpowiedz": "Zamiast prezentu ucieszy nas koperta, a zamiast kwiatów — zdrapka lub los na loterię." }
   ],
 
   "kontakt": [
-    { "rola": "Świadkowa", "imie": "Kasia", "telefon": "+48 601 000 000" },
-    { "rola": "Świadek", "imie": "Tomek", "telefon": "+48 602 000 000" }
+    { "rola": "Świadkowa", "imie": "Katarzyna Lamparska", "telefon": "+48 000 000 001" },
+    { "rola": "Świadek", "imie": "Paweł Januszewicz", "telefon": "+48 000 000 002" }
   ],
 
-  "stopka": "Do zobaczenia! Anna i Jan"
+  "stopka": "Do zobaczenia w Turznie!"
 }
