@@ -350,3 +350,8 @@ telefonów, zdjęcie Pary, decyzje z tabeli powyżej.
 5. Data w polu `"data"` w formacie `RRRR-MM-DDTGG:MM:SS` (np. `2027-06-19T15:00:00`).
 
 W razie wątpliwości czy plik jest poprawny, wklej go na https://jsonlint.com.
+
+**Widzisz starą wersję?** Treść (`content.json`) odświeża się zawsze, bo jest pobierana z
+parametrem antycache. Wygląd i logika (`styles.css`, `app.js`) są wersjonowane parametrem
+`?v=N` w `index.html`; po każdej zmianie tych dwóch plików podnieś `N` w obu miejscach, a
+przeglądarki gości pobiorą nowe pliki. Lokalnie pomaga też Ctrl+F5 (twarde odświeżenie).
