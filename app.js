@@ -51,8 +51,13 @@
   };
 
   const DATE_FMT = new Intl.DateTimeFormat("pl-PL", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const DAY_FMT = new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long", year: "numeric" });
   const parseLocal = (s) => { const d = new Date(s); return isNaN(d) ? null : d; };
   const pad = (n) => String(n).padStart(2, "0");
+  const store = {
+    get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* tryb prywatny */ } },
+  };
 
   /* ---------- Kalendarz (.ics) ---------- */
   const icsStamp = (d) => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "T" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
@@ -71,6 +76,17 @@
       "DESCRIPTION:" + icsEscape([m.opis || "", window.location.href].filter(Boolean).join("\n")),
       "END:VEVENT", "END:VCALENDAR"].filter(Boolean).join("\r\n");
   }
+  /** Link do Google Kalendarza (na iOS blob+download bywa zawodny). */
+  function gcalUrl(c, start) {
+    const end = new Date(start.getTime() + 10 * 60 * 60 * 1000);
+    const m = c.miejsce || {};
+    const p = new URLSearchParams({
+      action: "TEMPLATE", text: `Ślub ${c.para.ona} i ${c.para.on}`,
+      dates: icsStamp(start) + "/" + icsStamp(end),
+      location: [m.nazwa, m.adres].filter(has).join(", "), details: window.location.href,
+    });
+    return "https://calendar.google.com/calendar/render?" + p.toString();
+  }
 
   /* ---------- Hero ---------- */
   function renderHero(c) {
@@ -85,6 +101,7 @@
 
     const start = parseLocal(c.data);
     if (start) {
+      $("date").textContent = "";
       $("date").append(
         `${pad(start.getDate())}.${pad(start.getMonth() + 1)}.${start.getFullYear()}`,
         el("span", { class: "bar", "aria-hidden": "true" }),
@@ -117,11 +134,14 @@
   /* ---------- Sekcje ---------- */
   const section = (id, title, body) => el("section", { class: "section", id }, [has(title) ? el("h2", { class: "section__title", text: title }) : "", body]);
 
-  function photo(src, caption, landscape) {
+  function photo(src, caption, alt, landscape) {
     const fig = el("figure", { class: "photo" + (landscape ? " photo--landscape" : "") });
-    if (has(src)) fig.append(el("img", { src, alt: caption || "", loading: "lazy", decoding: "async" }));
+    if (has(src)) fig.append(el("img", { src, alt: alt || "", loading: "lazy", decoding: "async" }));
     else fig.append(el("div", { class: "photo__empty", text: "Tu będzie nasze zdjęcie" }));
-    if (has(caption)) fig.append(el("figcaption", null, TODO.test(caption) ? [el("span", { class: "todo", text: "do uzupełnienia" }), caption.replace(TODO, "")] : caption));
+    /* Notatka [DO UZUPEŁNIENIA] jest wskazówką dla autorów: pokazuj ją tylko póki nie ma zdjęcia. */
+    if (has(caption) && (!has(src) || !TODO.test(caption))) {
+      fig.append(el("figcaption", null, TODO.test(caption) ? [el("span", { class: "todo", text: "do uzupełnienia" }), caption.replace(TODO, "")] : caption));
+    }
     return fig;
   }
 
@@ -131,40 +151,64 @@
   /* ---------- Formularz RSVP -> Arkusz Google (Apps Script) ---------- */
   function rsvpForm(r) {
     const f = r.pola || {};
-    const field = (name, label, input) => el("label", { class: "field" }, [el("span", { class: "field__label", text: label }), input]);
+    let uid = 0;
+    const field = (name, label, input, hint) => {
+      const id = "rsvp-" + name + "-" + (++uid);
+      input.id = id;
+      const wrap = el("div", { class: "field" }, [el("label", { class: "field__label", for: id, text: label })]);
+      if (has(hint)) { const h = el("p", { class: "field__hint", id: id + "-hint", text: hint }); input.setAttribute("aria-describedby", h.id); wrap.append(h); }
+      wrap.append(input, el("p", { class: "field__error", id: id + "-err", role: "alert" }));
+      return wrap;
+    };
     const inp = (name, attrs) => el("input", Object.assign({ name, class: "input" }, attrs));
+    const setError = (input, msg) => {
+      const err = input.closest(".field")?.querySelector(".field__error");
+      if (err) err.textContent = msg || "";
+      if (msg) { input.setAttribute("aria-invalid", "true"); input.focus(); input.scrollIntoView({ block: "center", behavior: "smooth" }); }
+      else input.removeAttribute("aria-invalid");
+    };
 
     const form = el("form", { class: "rsvp-form", novalidate: "" });
+    const choice = el("fieldset", { class: "field field--choice" }, [
+      el("legend", { class: "field__label", text: "Czy będziecie? *" }),
+      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "tak", required: "" }), el("span", { text: "Tak, będziemy" })]),
+      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "nie" }), el("span", { text: "Niestety nie damy rady" })]),
+      el("p", { class: "field__error", role: "alert" }),
+    ]);
     form.append(
       field("imie", "Imię i nazwisko (jak na zaproszeniu) *", inp("imie", { type: "text", required: "", autocomplete: "name", minlength: "3", placeholder: "np. Anna Kowalska" })),
-      el("fieldset", { class: "field field--choice" }, [
-        el("legend", { class: "field__label", text: "Czy będziecie? *" }),
-        el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "tak", checked: "" }), el("span", { text: "Tak, będziemy!" })]),
-        el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "nie" }), el("span", { text: "Niestety nie damy rady" })]),
-      ]),
+      choice,
     );
-    if (f.osoby !== false) form.append(field("osoby", "Liczba osób (razem z Tobą)", inp("osoby", { type: "number", min: "1", max: "10", value: "1", inputmode: "numeric" })));
-    if (f.towarzyszace !== false) form.append(field("towarzyszace", "Imiona i nazwiska osób towarzyszących", inp("towarzyszace", { type: "text", placeholder: "np. Jan Kowalski" })));
-    if (f.dieta !== false) form.append(field("dieta", "Dieta, alergie", inp("dieta", { type: "text", placeholder: "np. wegetariańska, bez glutenu" })));
-    if (f.nocleg !== false) form.append(el("label", { class: "choice choice--single" }, [el("input", { type: "checkbox", name: "nocleg", value: "1" }), el("span", { text: "Chcemy skorzystać z noclegu w pałacu" })]));
-    if (f.piosenka !== false) form.append(field("piosenka", "Piosenka, przy której na pewno zatańczycie", inp("piosenka", { type: "text" })));
+    /* Pola tylko dla osób, które będą */
+    const onlyIfYes = el("div", { class: "rsvp-form__yes", hidden: "" });
+    if (f.osoby !== false) onlyIfYes.append(field("osoby", "Liczba osób łącznie", inp("osoby", { type: "number", min: "1", max: "10", value: "1", inputmode: "numeric" })));
+    if (f.towarzyszace !== false) onlyIfYes.append(field("towarzyszace", "Imiona i nazwiska osób towarzyszących", inp("towarzyszace", { type: "text", placeholder: "np. Jan Kowalski" })));
+    if (f.dieta !== false) onlyIfYes.append(field("dieta", "Dieta, alergie", inp("dieta", { type: "text", placeholder: "np. wegetariańska, bez glutenu" })));
+    if (f.nocleg !== false) onlyIfYes.append(el("label", { class: "choice choice--single" }, [el("input", { type: "checkbox", name: "nocleg", value: "1" }), el("span", { text: r.nocleg_etykieta || "Wstępnie chcemy skorzystać z noclegu w pałacu" })]));
+    if (f.piosenka !== false) onlyIfYes.append(field("piosenka", "Piosenka, przy której na pewno zatańczycie", inp("piosenka", { type: "text" })));
+    form.append(onlyIfYes);
     if (f.telefon) form.append(field("telefon", "Telefon kontaktowy", inp("telefon", { type: "tel", autocomplete: "tel" })));
-    if (f.wiadomosc !== false) form.append(field("wiadomosc", "Wiadomość dla nas", el("textarea", { name: "wiadomosc", class: "input", rows: "2" })));
+    if (f.wiadomosc !== false) form.append(field("wiadomosc", "Wiadomość dla nas", el("textarea", { name: "wiadomosc", class: "input", rows: "3" }),
+      r.wiadomosc_podpowiedz || "(np. imię i nazwisko osoby towarzyszącej, jeśli nie ma jej na zaproszeniu, albo cokolwiek, o czym powinniśmy wiedzieć)"));
     if (has(r.kod)) form.append(field("kod", "Kod z zaproszenia *", inp("kod", { type: "text", required: "", autocomplete: "off", autocapitalize: "characters" })));
+
+    form.addEventListener("change", (ev) => {
+      if (ev.target.name === "obecnosc") { onlyIfYes.hidden = ev.target.value !== "tak"; choice.querySelector(".field__error").textContent = ""; }
+    });
 
     const status = el("p", { class: "rsvp-form__status", role: "status", "aria-live": "polite" });
     const submit = el("button", { type: "submit", class: "btn btn--primary", text: "Wyślij potwierdzenie" });
     form.append(el("div", { class: "actions actions--center" }, submit), status);
 
     const storeKey = "rsvp:" + (r.endpoint || "");
-    const done = localStorage.getItem(storeKey);
-    if (done) { status.textContent = `Zgłoszenie dla „${done}” zostało już wysłane. Możesz je poprawić, wysyłając ponownie.`; }
+    const done = store.get(storeKey);
+    if (done) { status.textContent = `Zgłoszenie dla „${done}” zostało już wysłane. Możecie je poprawić, wysyłając ponownie.`; }
 
     /** Treść zgłoszenia jako tekst (fallback SMS / e-mail, gdy nie ma arkusza). */
     const asText = (d) => [
       `Potwierdzenie obecności: ${d.obecnosc === "nie" ? "NIE" : "TAK"}`,
       `Imię i nazwisko: ${d.imie}`,
-      d.osoby ? `Liczba osób: ${d.osoby}` : "",
+      d.obecnosc !== "nie" && d.osoby ? `Liczba osób: ${d.osoby}` : "",
       d.towarzyszace ? `Osoby towarzyszące: ${d.towarzyszace}` : "",
       d.dieta ? `Dieta: ${d.dieta}` : "",
       d.nocleg ? "Nocleg: TAK" : "",
@@ -177,17 +221,29 @@
       ev.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
       data.imie = String(data.imie || "").trim().replace(/\s+/g, " ");
-      if (data.imie.split(" ").length < 2) { status.textContent = "Podaj imię i nazwisko."; form.imie.focus(); return; }
-      if (has(r.kod) && String(data.kod || "").trim().toUpperCase() !== String(r.kod).toUpperCase()) { status.textContent = "Kod z zaproszenia się nie zgadza."; form.kod.focus(); return; }
+      setError(form.imie, "");
+      if (data.imie.split(" ").length < 2) { setError(form.imie, "Podajcie imię i nazwisko."); return; }
+      if (!data.obecnosc) { choice.querySelector(".field__error").textContent = "Zaznaczcie, czy będziecie."; choice.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+      if (has(r.kod) && String(data.kod || "").trim().toUpperCase() !== String(r.kod).toUpperCase()) { setError(form.kod, "Kod z zaproszenia się nie zgadza."); return; }
+      if (data.obecnosc === "nie") { delete data.osoby; delete data.dieta; delete data.nocleg; delete data.piosenka; delete data.towarzyszace; }
 
       if (!has(r.endpoint)) {
-        /* Brak arkusza: otwórz SMS (telefon) lub e-mail z gotową treścią zgłoszenia. */
-        const txt = encodeURIComponent(asText(data));
-        if (has(r.telefon)) window.location.href = "sms:" + telHref(r.telefon).slice(4) + "?body=" + txt;
-        else if (has(r.email)) window.location.href = "mailto:" + r.email + "?subject=" + encodeURIComponent("Potwierdzenie obecności") + "&body=" + txt;
-        else { status.textContent = "Formularz nie jest jeszcze podłączony. Napisz do nas bezpośrednio."; return; }
-        status.textContent = "Otwieramy wiadomość z gotową treścią. Wystarczy ją wysłać.";
-        localStorage.setItem(storeKey, data.imie);
+        /* Brak arkusza: pokaż gotową treść do skopiowania i przyciski SMS / e-mail. */
+        const txt = asText(data);
+        const enc = encodeURIComponent(txt);
+        const box = el("div", { class: "rsvp-form__manual" }, [
+          el("p", { text: "Formularz nie jest jeszcze połączony z listą gości. Wyślijcie nam tę treść wiadomością:" }),
+          el("textarea", { class: "input", readonly: "", rows: String(Math.min(8, txt.split("\n").length + 1)), text: txt }),
+          el("div", { class: "actions actions--center" }, [
+            has(r.telefon) ? linkBtn("sms:" + telHref(r.telefon).slice(4) + "?body=" + enc, "Wyślij SMS", true) : "",
+            has(r.email) ? linkBtn("mailto:" + r.email + "?subject=" + encodeURIComponent("Potwierdzenie obecności") + "&body=" + enc, "Wyślij e-mail", !has(r.telefon)) : "",
+            el("button", { type: "button", class: "btn", text: "Skopiuj treść" }),
+          ]),
+        ]);
+        box.querySelector("button").addEventListener("click", async (e) => {
+          try { await navigator.clipboard.writeText(txt); e.target.textContent = "Skopiowano"; } catch { box.querySelector("textarea").select(); }
+        });
+        form.replaceChildren(box);
         return;
       }
 
@@ -196,15 +252,32 @@
         /* Apps Script nie zwraca nagłówków CORS dla POST, dlatego tryb no-cors:
            odpowiedzi nie odczytamy, ale zapis w arkuszu się wykona. Walidacja jest po naszej stronie. */
         await fetch(r.endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(data) });
-        localStorage.setItem(storeKey, data.imie);
-        form.replaceChildren(el("p", { class: "rsvp-form__thanks", text: r.podziekowanie || "Dziękujemy! Zapisaliśmy Wasze zgłoszenie." }));
+        store.set(storeKey, data.imie);
+        const thanks = data.obecnosc === "nie" ? (r.podziekowanie_nie || "Dziękujemy za wiadomość. Szkoda, że się nie zobaczymy, ale rozumiemy.") : (r.podziekowanie || "Dziękujemy, zapisaliśmy Wasze zgłoszenie.");
+        form.replaceChildren(el("p", { class: "rsvp-form__thanks", text: thanks }));
       } catch (err) {
         console.error(err);
-        status.textContent = "Nie udało się wysłać. Spróbuj ponownie albo napisz do nas SMS.";
+        status.textContent = "Nie udało się wysłać. Spróbujcie ponownie albo napiszcie do nas SMS.";
         submit.disabled = false;
       }
     });
     return form;
+  }
+
+  /** Formularz w rozwijanym panelu: domyślnie zwinięty; otwiera się też po wejściu z #rsvp. */
+  function rsvpPanel(r) {
+    const panel = el("details", { class: "rsvp-panel" }, [
+      el("summary", { class: "rsvp-panel__toggle" }, [
+        el("span", { class: "btn btn--primary rsvp-panel__open", text: r.przycisk || "Potwierdź obecność" }),
+        el("span", { class: "btn rsvp-panel__close", text: "Zwiń formularz" }),
+      ]),
+      rsvpForm(r),
+    ]);
+    panel.addEventListener("toggle", () => { if (panel.open) panel.querySelector("input[name=imie]")?.focus({ preventScroll: true }); });
+    const openFromHash = () => { if (location.hash === "#rsvp") panel.open = true; };
+    window.addEventListener("hashchange", openFromHash);
+    openFromHash();
+    return panel;
   }
 
   function renderMain(c, start) {
@@ -222,11 +295,12 @@
       ]);
       const acts = el("div", { class: "actions actions--center" });
       if (start) {
+        acts.append(linkBtn(gcalUrl(c, start), "Kalendarz Google"));
         const blob = new Blob([buildIcs(c, start)], { type: "text/calendar;charset=utf-8" });
-        acts.append(el("a", { class: "btn", href: URL.createObjectURL(blob), download: "slub.ics", text: "Dodaj do kalendarza" }));
+        acts.append(el("a", { class: "btn", href: URL.createObjectURL(blob), download: "slub.ics", text: "Plik .ics (Apple, Outlook)" }));
       }
       if (acts.childElementCount) text.append(acts);
-      app.append(section("o-nas", "", el("div", { class: "split" }, [text, photo(o.zdjecie, o.zdjecie_podpis)])));
+      app.append(section("o-nas", "", el("div", { class: "split" }, [text, photo(o.zdjecie, o.zdjecie_podpis, `${c.para.ona} i ${c.para.on}`)])));
     }
 
     /* Gdzie: jeden akapit, jedna mapa, akwarela bez ramki */
@@ -267,11 +341,11 @@
       if (has(r.email)) btns.push(linkBtn("mailto:" + r.email + "?subject=" + encodeURIComponent("Potwierdzenie obecności") + (body ? "&body=" + body : ""), "Napisz e-mail"));
       app.append(section("rsvp", r.tytul || "Potwierdzenie obecności", el("div", { class: "rsvp" }, [
         has(r.wstep) ? para(r.wstep) : "",
-        termin ? el("p", { class: "meta" }, ["Potwierdźcie swoją obecność do ", el("strong", { text: DATE_FMT.format(termin) }), "."]) : "",
+        termin ? el("p", { class: "meta" }, ["Potwierdźcie swoją obecność do ", el("strong", { text: DAY_FMT.format(termin) }), "."]) : "",
         has(r.tekst) ? para(r.tekst) : "",
-        showForm ? rsvpForm(r) : "",
+        showForm ? rsvpPanel(r) : "",
         btns.length ? el("div", { class: "rsvp__alt" }, [
-          showForm ? el("p", { class: "meta", text: "Wolisz inaczej? Napisz lub zadzwoń:" }) : "",
+          showForm ? el("p", { class: "meta", text: "Wolicie inaczej? Napiszcie lub zadzwońcie:" }) : "",
           el("div", { class: "actions actions--center" }, btns),
         ]) : "",
       ])));
@@ -351,8 +425,8 @@
     .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then((c) => { const start = renderHero(c); renderMain(c, start); initNav(); })
     .catch((err) => {
-      console.error(err);
-      $("app").replaceChildren(el("p", { class: "error", text: "Nie udało się wczytać treści. Sprawdź poprawność pliku content.json (np. na jsonlint.com)." }));
+      console.error("Nie udało się wczytać lub wyrenderować content.json (sprawdź składnię, np. na jsonlint.com):", err);
+      $("app").replaceChildren(el("p", { class: "error", text: "Nie udało się wczytać strony. Odświeżcie ją za chwilę." }));
       $("names").textContent = "Informacje weselne";
     });
 })();

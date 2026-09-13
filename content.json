@@ -12,7 +12,7 @@
   },
 
   "o_nas": {
-    "tytul": "Cześć!",
+    "tytul": "Kochani",
     "tekst": "Już niedługo widzimy się na naszym ślubie. Mamy nadzieję, że tak jak my, nie możecie się doczekać tego dnia. Zebraliśmy tu wszystko, co może się Wam przydać: od dojazdu po noclegi. Strona będzie uzupełniana, więc warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
     "zdjecie": "",
     "zdjecie_podpis": "[DO UZUPEŁNIENIA] nasze zdjęcie, pion, ok. 1200x1500 px"
@@ -40,22 +40,26 @@
 
   "rsvp": {
     "tytul": "Potwierdzenie obecności",
-    "wstep": "Pomóżcie nam dobrze policzyć krzesła, talerze i kawałki tortu!",
+    "wstep": "Pomóżcie nam dobrze zaplanować stoły i menu.",
     "termin": "2027-04-30",
-    "tekst": "Wystarczy imię i nazwisko z zaproszenia. Jeśli przyjeżdżacie parą lub z rodziną, podajcie wszystkich w jednym zgłoszeniu.",
+    "tekst": "Wystarczy imię i nazwisko z zaproszenia. Jeśli przyjeżdżacie we dwoje lub z bliskimi, podajcie wszystkich w jednym zgłoszeniu.",
     "formularz": true,
     "endpoint": "",
     "kod": "",
     "pola": {
       "osoby": true,
-      "towarzyszace": true,
+      "towarzyszace": false,
       "dieta": true,
       "nocleg": true,
       "piosenka": true,
       "wiadomosc": true,
       "telefon": false
     },
-    "podziekowanie": "Dziękujemy! Zapisaliśmy Wasze zgłoszenie. Do zobaczenia w Turznie!",
+    "przycisk": "Potwierdź obecność",
+    "nocleg_etykieta": "Wstępnie chcemy skorzystać z noclegu w pałacu",
+    "wiadomosc_podpowiedz": "(np. imię i nazwisko osoby towarzyszącej, jeśli nie ma jej na zaproszeniu, albo cokolwiek, o czym powinniśmy wiedzieć)",
+    "podziekowanie": "Dziękujemy, zapisaliśmy Wasze zgłoszenie. Do zobaczenia w Turznie.",
+    "podziekowanie_nie": "Dziękujemy za wiadomość. Szkoda, że się nie zobaczymy, ale rozumiemy.",
     "link_tak": "",
     "link_nie": "",
     "telefon": "+48 000 000 001",
@@ -72,7 +76,7 @@
         "adres": "Toruńska 1, 87-148 Turzno",
         "telefon": "",
         "link": "",
-        "uwagi": "Szczegóły dotyczące noclegów podamy wkrótce."
+        "uwagi": "[DO UZUPEŁNIENIA] Dla gości rezerwujemy pokoje w pałacu. W formularzu potwierdzenia zaznaczcie wstępnie, czy chcecie nocować; cenę i sposób rezerwacji podamy wkrótce."
       }
     ]
   },
@@ -81,12 +85,16 @@
     "tytul": "Przydatne informacje",
     "pozycje": [
       {
-        "pytanie": "Czy będzie parking?",
-        "odpowiedz": "[DO POTWIERDZENIA] Tak, na terenie pałacu jest bezpłatny parking dla gości."
+        "pytanie": "O której być na miejscu?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Najlepiej ok. 14:30, żeby spokojnie zająć miejsce w kaplicy przed rozpoczęciem ceremonii."
       },
       {
         "pytanie": "Jak dojechać?",
         "odpowiedz": "[DO UZUPEŁNIENIA] Turzno leży ok. 15 km od Torunia. Najbliższa stacja PKP: Toruń Główny, lotnisko: Bydgoszcz. Jeśli zorganizujemy bus zbiorczy z Torunia, podamy tu godziny."
+      },
+      {
+        "pytanie": "Czy będzie parking?",
+        "odpowiedz": "[DO POTWIERDZENIA] Tak, na terenie pałacu jest bezpłatny parking dla gości."
       },
       {
         "pytanie": "Jak się ubrać?",
@@ -94,47 +102,47 @@
       },
       {
         "pytanie": "Czy mogę przyjść z dzieckiem?",
-        "odpowiedz": "Ten wyjątkowy wieczór spędzimy tylko w gronie dorosłych. Mamy nadzieję, że odpoczniecie od codziennych obowiązków."
+        "odpowiedz": "Ten wieczór chcemy spędzić w gronie dorosłych. Mamy nadzieję, że będzie dla Was okazją do beztroskiej zabawy."
       },
       {
         "pytanie": "Co zamiast kwiatów i prezentów?",
-        "odpowiedz": "Wasza obecność to dla nas największy prezent! Jeśli jednak zechcecie podarować nam coś więcej, będziemy wdzięczni za wkład w spełnienie naszych marzeń: zamiast prezentu koperta, a zamiast kwiatów zdrapka lub los na loterię."
+        "odpowiedz": "Wasza obecność jest dla nas najważniejsza. Jeśli chcecie podarować nam coś jeszcze, zamiast kwiatów ucieszy nas zdrapka lub los na loterię, a zamiast prezentu drobny wkład w nasze wspólne marzenia."
       },
       {
         "pytanie": "Czy będą poprawiny?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Tak, w niedzielę 22 sierpnia od godziny 14:00 w pałacu. Zapraszamy wszystkich, którzy zostaną na noc."
+        "odpowiedz": "[DO UZUPEŁNIENIA] Tak, w niedzielę 22 sierpnia od godziny 14:00 w pałacu. Zapraszamy wszystkich, nie tylko gości nocujących w pałacu."
       },
       {
-        "pytanie": "Gdzie wrzucić zdjęcia z wesela?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Do wspólnego albumu, link pojawi się tu w dniu ślubu. Podczas ceremonii prosimy o telefony w kieszeniach, resztą zajmie się fotograf.",
-        "link": "",
-        "link_tekst": "Dodaj zdjęcia"
-      },
-      {
-        "pytanie": "Mogę zamówić piosenkę?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Jasne! Wpiszcie utwór, przy którym na pewno zatańczycie, w formularzu potwierdzenia. DJ dostanie listę.",
+        "pytanie": "Czy mogę zamówić piosenkę?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Oczywiście. Wpiszcie utwór, przy którym na pewno zatańczycie, w formularzu potwierdzenia. DJ dostanie listę.",
         "link": "",
         "link_tekst": ""
       },
       {
-        "pytanie": "Co, jeśli nie mogę przyjść mimo potwierdzenia?",
-        "odpowiedz": "Zupełnie to rozumiemy. Wystarczy krótka wiadomość, że Was nie będzie. Bardzo ułatwi nam to organizację."
+        "pytanie": "Gdzie wrzucić zdjęcia z wesela?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Do wspólnego albumu. Link pojawi się tu w dniu ślubu.",
+        "link": "",
+        "link_tekst": "Dodaj zdjęcia"
       },
       {
-        "pytanie": "O której być na miejscu?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Najlepiej ok. 14:30, żeby spokojnie zająć miejsce w kaplicy przed rozpoczęciem ceremonii."
+        "pytanie": "Czy mogę robić zdjęcia podczas ceremonii?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Podczas ceremonii prosimy o telefony w kieszeniach. Tym momentem zajmie się fotograf, a Wy będziecie z nami. Potem fotografujcie do woli."
+      },
+      {
+        "pytanie": "Co, jeśli nie mogę przyjść mimo potwierdzenia?",
+        "odpowiedz": "Zupełnie to rozumiemy. Wystarczy krótka wiadomość, że Was nie będzie. Bardzo ułatwi nam to organizację."
       }
     ]
   },
 
   "kontakt": {
     "tytul": "Kontakt",
-    "wstep": "Macie pytania albo chcecie coś zaktualizować? Jesteśmy do Waszej dyspozycji!",
+    "wstep": "Macie pytania albo chcecie coś zmienić w zgłoszeniu? Piszcie lub dzwońcie śmiało.",
     "osoby": [
       { "imie": "Agnieszka", "telefon": "+48 000 000 001", "zdjecie": "" },
       { "imie": "Marcin", "telefon": "+48 000 000 002", "zdjecie": "" }
     ]
   },
 
-  "stopka": "Do zobaczenia w Turznie!"
+  "stopka": "Do zobaczenia w Turznie"
 }

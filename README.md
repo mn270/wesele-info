@@ -218,11 +218,38 @@ a zgłoszenia lądują w Arkuszu Google (eksport do .xlsx jednym kliknięciem).
 
 ### Jak działa formularz
 
-Pola: **imię i nazwisko (wymagane, min. dwa słowa)**, Tak / Nie, liczba osób, osoby
-towarzyszące, dieta, nocleg, piosenka, wiadomość; opcjonalnie telefon i **kod z zaproszenia**
-(`rsvp.kod`, jeden wspólny, np. `TURZNO2027`; pusty = bez kodu). Które pola pokazywać, ustawiasz
-w `rsvp.pola`. Jedno nazwisko = jeden wiersz: ponowne zgłoszenie tej samej osoby **nadpisuje**
-poprzednie, więc goście mogą sami poprawiać dane, a lista nie ma duplikatów.
+Pola: **imię i nazwisko (wymagane, min. dwa słowa)**, Tak / Nie (wymagane, bez domyślnego
+wyboru), a po wybraniu „Tak”: liczba osób, dieta, nocleg, piosenka; zawsze: wiadomość dla nas
+z podpowiedzią (osoba towarzysząca spoza zaproszenia, inne uwagi); opcjonalnie telefon i
+**kod z zaproszenia** (`rsvp.kod`, jeden wspólny, np. `TURZNO2027`; pusty = bez kodu). Które pola
+pokazywać, ustawiasz w `rsvp.pola`. Formularz jest **zwinięty** pod przyciskiem „Potwierdź
+obecność” (`rsvp.przycisk`) i otwiera się sam po wejściu z linku `#rsvp` (nawigacja). Jedno
+nazwisko = jeden wiersz: ponowne zgłoszenie tej samej osoby **nadpisuje** poprzednie, więc goście
+mogą sami poprawiać dane, a lista nie ma duplikatów.
+
+### Etap 6 (prompt) i niezależny review
+
+> Potwierdzenie obecności ma być rozwijane, domyślnie zwinięte. W „Wiadomości dla nas” dodaj
+> ładnie ujętą podpowiedź w nawiasie, że można podać imię i nazwisko osoby towarzyszącej (nie
+> wszyscy są małżeństwem) albo inną potrzebę. Pod „Noclegami” są dwie kreski, jedna do usunięcia.
+> Zrób review czytelności, estetyki i wygody przez inny model i wprowadź poprawki.
+
+Review wykonał niezależny agent (tylko odczyt kodu i treści, perspektywa gościa na telefonie).
+Wdrożone z jego listy: kontrast `--muted` podniesiony do >= 4,5:1; większe cele dotykowe
+(nawigacja, przyciski min. 44 px); tytuły sekcji skalowane `clamp` na wąskich ekranach;
+nawigacja bez obcinania skrajnych linków; spójna forma „Wy” w całym formularzu; brak
+domyślnego „Tak” i ukrywanie pól logistycznych po „Nie”; błędy walidacji przy polu
+(`aria-invalid`, przewinięcie do pola); podpowiedź jako `aria-describedby`; komunikat błędu
+wczytania zrozumiały dla gościa (szczegóły techniczne tylko w konsoli); `localStorage` odporny
+na tryb prywatny; termin RSVP bez dnia tygodnia; dodatkowy przycisk „Kalendarz Google” (na
+iOS pobieranie .ics bywa zawodne); statyczna treść w HTML dla braku JavaScriptu; style FAQ
+zawężone do `.faq` (wcześniej „+” przeciekał na panel RSVP); cyfry tabelaryczne w odliczaniu;
+kolejność pytań od „O której być na miejscu?”; rozbicie zdjęć na dwa pytania; łagodniejsze
+sformułowania (dzieci, prezenty, poprawiny), mniej wykrzykników, „Kochani” zamiast „Cześć!”.
+Sprzeczność „dziecko i dostawka” w podpowiedzi vs. „tylko dorośli” w FAQ usunięta.
+
+Świadomie pominięte: usuwanie placeholdera zdjęcia (zostaje do czasu wgrania pliku), osobne
+pole „osoby towarzyszące” (zastąpione podpowiedzią w wiadomości, zgodnie z życzeniem).
 
 | Stan `rsvp.endpoint` | Co robi „Wyślij potwierdzenie” | Gdzie ląduje |
 |---|---|---|
