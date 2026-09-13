@@ -143,6 +143,14 @@ img { max-width: 100%; display: block; }
   color: var(--muted); font-style: italic;
 }
 
+/* Akwarela bez ramki, wtopiona w tło strony */
+.artwork { margin: 0; }
+.artwork img { width: 100%; height: auto; mix-blend-mode: multiply; filter: saturate(.95); }
+
+/* Nazwa miejsca: kapitaliki ze złotą kreską zamiast ikony */
+.place__name { font-family: var(--font-caps); font-size: .95rem; letter-spacing: .2em; text-transform: uppercase; padding-left: .9rem; border-left: 1px solid var(--gold); line-height: 1.4; }
+.place__addr { margin: .35rem 0 0 .95rem !important; }
+
 /* Odliczanie */
 .countdown { display: flex; justify-content: center; gap: 1.6rem; margin-top: 1.4rem; }
 .countdown__item { text-align: center; min-width: 3rem; }
@@ -177,11 +185,34 @@ img { max-width: 100%; display: block; }
 .rsvp p { margin: .5rem 0 0; }
 .rsvp .meta strong { font-weight: 500; }
 .rsvp .actions { margin-top: 1.4rem; }
+.rsvp__alt { margin-top: 2rem; padding-top: 1.2rem; border-top: 1px dotted var(--frame); }
+.rsvp__alt .actions { margin-top: .8rem; }
+
+/* Formularz RSVP */
+.rsvp-form { text-align: left; margin-top: 1.6rem; display: grid; gap: 1rem; }
+.field { display: grid; gap: .35rem; margin: 0; padding: 0; border: 0; min-width: 0; }
+.field__label { font-family: var(--font-caps); font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.input {
+  width: 100%; font: inherit; color: var(--text); background: transparent;
+  border: 0; border-bottom: 1px solid var(--line); padding: .45rem 0; border-radius: 0; outline: none;
+  transition: border-color .15s;
+}
+.input:focus { border-bottom-color: var(--text); }
+textarea.input { resize: vertical; min-height: 2.6rem; }
+.field--choice { display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; align-items: center; }
+.field--choice legend { padding: 0; margin-bottom: .3rem; width: 100%; }
+.choice { display: inline-flex; align-items: center; gap: .5rem; cursor: pointer; }
+.choice input { accent-color: var(--text); width: 1rem; height: 1rem; margin: 0; }
+.choice--single { margin-top: .2rem; }
+.rsvp-form .actions { margin-top: .6rem; }
+.rsvp-form__status { text-align: center; color: var(--muted); font-style: italic; min-height: 1.4em; margin: 0 !important; }
+.rsvp-form__thanks { text-align: center; font-size: 1.3rem; font-style: italic; padding: 1.5rem 0; }
+.btn:disabled { opacity: .5; cursor: default; }
 
 /* Noclegi */
 .cards { display: grid; gap: 1.2rem; }
 @media (min-width: 640px) { .cards { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); } }
-.card { padding: 1.2rem; background: var(--paper); border: 1px dotted var(--frame); }
+.card { padding: 1.2rem 0; border-top: 1px dotted var(--frame); border-bottom: 1px dotted var(--frame); }
 .card h3 { font-family: var(--font-caps); font-size: .85rem; letter-spacing: .18em; text-transform: uppercase; }
 .card p { margin: .4rem 0 0; }
 .card .meta { color: var(--muted); }

@@ -13,16 +13,16 @@
 
   "o_nas": {
     "tytul": "Cześć!",
-    "tekst": "Już niedługo widzimy się na naszym ślubie. Mamy nadzieję, że tak jak my, nie możecie się doczekać tego dnia. Zebraliśmy tu wszystko, co może się Wam przydać — od dojazdu po noclegi. Strona będzie uzupełniana, więc warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
+    "tekst": "Już niedługo widzimy się na naszym ślubie. Mamy nadzieję, że tak jak my, nie możecie się doczekać tego dnia. Zebraliśmy tu wszystko, co może się Wam przydać: od dojazdu po noclegi. Strona będzie uzupełniana, więc warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
     "zdjecie": "",
-    "zdjecie_podpis": "[DO UZUPEŁNIENIA] nasze zdjęcie — pion, ok. 1200×1500 px"
+    "zdjecie_podpis": "[DO UZUPEŁNIENIA] nasze zdjęcie, pion, ok. 1200x1500 px"
   },
 
   "miejsce": {
     "tytul": "Gdzie?",
     "nazwa": "Pałac Romantyczny w Turznie",
     "adres": "Toruńska 1, 87-148 Turzno",
-    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie pałacu. Zaraz po ceremonii, w tym samym miejscu, zapraszamy na przyjęcie weselne — nie trzeba się nigdzie przemieszczać.",
+    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie pałacu. Zaraz po ceremonii, w tym samym miejscu, zapraszamy na przyjęcie weselne. Nie trzeba się nigdzie przemieszczać.",
     "zdjecie": "img/palac.png"
   },
 
@@ -42,7 +42,20 @@
     "tytul": "Potwierdzenie obecności",
     "wstep": "Pomóżcie nam dobrze policzyć krzesła, talerze i kawałki tortu!",
     "termin": "2027-04-30",
-    "tekst": "Dajcie nam też znać o diecie wegetariańskiej lub alergiach.",
+    "tekst": "Wystarczy imię i nazwisko z zaproszenia. Jeśli przyjeżdżacie parą lub z rodziną, podajcie wszystkich w jednym zgłoszeniu.",
+    "formularz": true,
+    "endpoint": "",
+    "kod": "",
+    "pola": {
+      "osoby": true,
+      "towarzyszace": true,
+      "dieta": true,
+      "nocleg": true,
+      "piosenka": true,
+      "wiadomosc": true,
+      "telefon": false
+    },
+    "podziekowanie": "Dziękujemy! Zapisaliśmy Wasze zgłoszenie. Do zobaczenia w Turznie!",
     "link_tak": "",
     "link_nie": "",
     "telefon": "+48 000 000 001",
@@ -77,35 +90,35 @@
       },
       {
         "pytanie": "Jak się ubrać?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Elegancko — bez sztywnego dress code'u. Mamy jedną prośbę: unikajcie bieli i bardzo jasnych sukienek."
+        "odpowiedz": "[DO UZUPEŁNIENIA] Elegancko, bez sztywnego dress code'u. Mamy jedną prośbę: unikajcie bieli i bardzo jasnych sukienek."
       },
       {
         "pytanie": "Czy mogę przyjść z dzieckiem?",
-        "odpowiedz": "Ten wyjątkowy wieczór spędzimy tylko w gronie dorosłych — mamy nadzieję, że odpoczniecie od codziennych obowiązków."
+        "odpowiedz": "Ten wyjątkowy wieczór spędzimy tylko w gronie dorosłych. Mamy nadzieję, że odpoczniecie od codziennych obowiązków."
       },
       {
         "pytanie": "Co zamiast kwiatów i prezentów?",
-        "odpowiedz": "Wasza obecność to dla nas największy prezent! Jeśli jednak zechcecie podarować nam coś więcej, będziemy wdzięczni za wkład w spełnienie naszych marzeń — zamiast prezentu koperta, a zamiast kwiatów zdrapka lub los na loterię."
+        "odpowiedz": "Wasza obecność to dla nas największy prezent! Jeśli jednak zechcecie podarować nam coś więcej, będziemy wdzięczni za wkład w spełnienie naszych marzeń: zamiast prezentu koperta, a zamiast kwiatów zdrapka lub los na loterię."
       },
       {
         "pytanie": "Czy będą poprawiny?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Tak, w niedzielę 22 sierpnia od godziny 14:00 w pałacu — zapraszamy wszystkich, którzy zostaną na noc."
+        "odpowiedz": "[DO UZUPEŁNIENIA] Tak, w niedzielę 22 sierpnia od godziny 14:00 w pałacu. Zapraszamy wszystkich, którzy zostaną na noc."
       },
       {
         "pytanie": "Gdzie wrzucić zdjęcia z wesela?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Do wspólnego albumu — link pojawi się tu w dniu ślubu. Podczas ceremonii prosimy o telefony w kieszeniach, resztą zajmie się fotograf.",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Do wspólnego albumu, link pojawi się tu w dniu ślubu. Podczas ceremonii prosimy o telefony w kieszeniach, resztą zajmie się fotograf.",
         "link": "",
         "link_tekst": "Dodaj zdjęcia"
       },
       {
         "pytanie": "Mogę zamówić piosenkę?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Jasne! Wpiszcie utwór, przy którym na pewno zatańczycie, w formularzu potwierdzenia — DJ dostanie listę.",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Jasne! Wpiszcie utwór, przy którym na pewno zatańczycie, w formularzu potwierdzenia. DJ dostanie listę.",
         "link": "",
         "link_tekst": ""
       },
       {
         "pytanie": "Co, jeśli nie mogę przyjść mimo potwierdzenia?",
-        "odpowiedz": "Zupełnie to rozumiemy. Wystarczy krótka wiadomość, że Was nie będzie — bardzo ułatwi nam to organizację."
+        "odpowiedz": "Zupełnie to rozumiemy. Wystarczy krótka wiadomość, że Was nie będzie. Bardzo ułatwi nam to organizację."
       },
       {
         "pytanie": "O której być na miejscu?",

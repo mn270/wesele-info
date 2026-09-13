@@ -199,7 +199,64 @@ Na trzeciej karcie zaproszenia jest greige'owe pole (`#b6b3a2`) przeznaczone na 
 > Teksty z prefiksem `[DO UZUPEŁNIENIA]` / `[DO POTWIERDZENIA]` to propozycje planera — na
 > stronie mają żółtą etykietę, dopóki prefiks nie zostanie usunięty.
 
-## Potwierdzenie obecności jednym kliknięciem — opinia i integracja
+## Potwierdzenie obecności: formularz na stronie, zapis do arkusza (Excel)
+
+### Etap 5 (prompt)
+
+> (1) W sekcji „Gdzie?” akwarela pałacu ma białe tło: usuń je i wtóp obraz w tło strony.
+> (2) Pinezka przy nazwie pałacu wygląda sztucznie: nadaj elegancki styl albo usuń i zostaw sam
+> napis. (3) „Noclegi” mają białe tło pod treścią: popraw. (4) Nie używaj długich pauz „—” w
+> treści; zamień na krótkie lub przeredaguj. (5) Potwierdzenia obecności mają się same zapisywać
+> do Excela albo pliku, nie chcę spisywać ręcznie. Na stronie referencyjnej był kod dla
+> osoby/pary; u nas wystarczy wymagać imienia i nazwiska. Prosty mechanizm do spisu gości.
+
+Co z tego wynikło: `img/palac.png` ma przezroczyste tło (`tools/make_palace_transparent.py`,
+flood-fill od krawędzi, wnętrze budynku nietknięte) i jest wyświetlany bez ramki z
+`mix-blend-mode: multiply`; nazwa pałacu to kapitaliki ze złotą kreską z lewej; karty noclegów
+nie mają białego tła; długie pauzy usunięte z całej treści; **na stronie jest formularz RSVP**,
+a zgłoszenia lądują w Arkuszu Google (eksport do .xlsx jednym kliknięciem).
+
+### Jak działa formularz
+
+Pola: **imię i nazwisko (wymagane, min. dwa słowa)**, Tak / Nie, liczba osób, osoby
+towarzyszące, dieta, nocleg, piosenka, wiadomość; opcjonalnie telefon i **kod z zaproszenia**
+(`rsvp.kod`, jeden wspólny, np. `TURZNO2027`; pusty = bez kodu). Które pola pokazywać, ustawiasz
+w `rsvp.pola`. Jedno nazwisko = jeden wiersz: ponowne zgłoszenie tej samej osoby **nadpisuje**
+poprzednie, więc goście mogą sami poprawiać dane, a lista nie ma duplikatów.
+
+| Stan `rsvp.endpoint` | Co robi „Wyślij potwierdzenie” | Gdzie ląduje |
+|---|---|---|
+| **ustawiony** (adres Apps Script) | POST JSON do arkusza | Arkusz Google, karta `RSVP` |
+| pusty (jak teraz) | otwiera SMS (`rsvp.telefon`) lub e-mail (`rsvp.email`) z gotową treścią zgłoszenia | Wasz telefon / skrzynka |
+
+Pod formularzem zawsze są też przyciski „Wolisz inaczej? SMS / Zadzwoń” dla osób, które nie
+chcą nic wypełniać. `rsvp.formularz: false` wyłącza formularz i przywraca samą wersję z przyciskami.
+
+### Podłączenie arkusza (ok. 10 minut, 0 zł)
+
+1. Załóż nowy **Arkusz Google** (np. „Goście 2027”) na prywatnym koncie.
+2. **Rozszerzenia → Apps Script**, usuń przykładowy kod, wklej zawartość
+   `tools/rsvp_apps_script.gs`. Jeśli chcesz kod z zaproszenia, wpisz go w `KOD` (i ten sam w
+   `content.json` → `rsvp.kod`). Zapisz.
+3. **Wdróż → Nowe wdrożenie → typ: Aplikacja internetowa**; *Uruchamiaj jako: Ja*; *Kto ma
+   dostęp: Każdy*. Zatwierdź uprawnienia (jednorazowo). Skopiuj adres kończący się na `/exec`.
+4. Wklej go do `content.json` → `rsvp.endpoint`. Commit. Gotowe: pierwsze zgłoszenie samo
+   utworzy kartę `RSVP` z nagłówkami.
+5. Excel: **Plik → Pobierz → Microsoft Excel (.xlsx)**. Arkusz możesz też udostępnić Agnieszce
+   do podglądu na telefonie (aplikacja Arkusze).
+
+Bezpieczeństwo i granice: adres `/exec` jest publiczny, ale przyjmuje tylko POST z danymi
+zgłoszenia i nie zwraca zawartości arkusza. Ochroną przed żartami jest opcjonalny wspólny kod
+z zaproszenia oraz nadpisywanie po nazwisku (złośliwe wpisy łatwo usunąć). Limity Apps Script
+(20 000 wywołań/dzień) są dla wesela bez znaczenia. Adres QR pozostaje niezależny od tego
+mechanizmu.
+
+Dlaczego nie kod dla każdej pary jak na stronie referencyjnej: wymaga wygenerowania i
+wydrukowania unikalnych kodów na każdym zaproszeniu, a zaproszenia są już zaprojektowane;
+wymaga też listy gości przed startem strony. Nazwisko + wspólny kod daje 95 % tej wartości
+za 5 % pracy.
+
+## Wcześniejsza analiza: RSVP jednym kliknięciem (Google Forms)
 
 **Tak, warto.** Z doświadczenia: im mniej kroków, tym wyższy odsetek odpowiedzi w terminie;
 przy telefonicznym RSVP typowo 30–40 % gości trzeba dopytywać. Strona jest statyczna (GitHub

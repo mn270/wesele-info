@@ -1,4 +1,4 @@
-/* Strona informacyjna wesela — renderuje treść z content.json.
+/* Strona informacyjna wesela: renderuje treść z content.json.
    Nie trzeba tu nic zmieniać; całą treść edytujesz w content.json. */
 (function () {
   "use strict";
@@ -77,7 +77,7 @@
     const names = $("names");
     names.textContent = "";
     names.append(c.para.ona, el("span", { class: "amp", text: "&" }), c.para.on);
-    document.title = `${c.para.ona} & ${c.para.on} — informacje weselne`;
+    document.title = `${c.para.ona} & ${c.para.on} - informacje weselne`;
 
     const h = c.hero || {};
     if (has(h.tlo)) $("hero-bg").style.backgroundImage = `url("${encodeURI(h.tlo)}")`;
@@ -125,6 +125,88 @@
     return fig;
   }
 
+  /** Akwarela bez ramki, wtopiona w tło strony (multiply). */
+  const artwork = (src, alt) => el("figure", { class: "artwork" }, el("img", { src, alt: alt || "", loading: "lazy", decoding: "async" }));
+
+  /* ---------- Formularz RSVP -> Arkusz Google (Apps Script) ---------- */
+  function rsvpForm(r) {
+    const f = r.pola || {};
+    const field = (name, label, input) => el("label", { class: "field" }, [el("span", { class: "field__label", text: label }), input]);
+    const inp = (name, attrs) => el("input", Object.assign({ name, class: "input" }, attrs));
+
+    const form = el("form", { class: "rsvp-form", novalidate: "" });
+    form.append(
+      field("imie", "Imię i nazwisko (jak na zaproszeniu) *", inp("imie", { type: "text", required: "", autocomplete: "name", minlength: "3", placeholder: "np. Anna Kowalska" })),
+      el("fieldset", { class: "field field--choice" }, [
+        el("legend", { class: "field__label", text: "Czy będziecie? *" }),
+        el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "tak", checked: "" }), el("span", { text: "Tak, będziemy!" })]),
+        el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "nie" }), el("span", { text: "Niestety nie damy rady" })]),
+      ]),
+    );
+    if (f.osoby !== false) form.append(field("osoby", "Liczba osób (razem z Tobą)", inp("osoby", { type: "number", min: "1", max: "10", value: "1", inputmode: "numeric" })));
+    if (f.towarzyszace !== false) form.append(field("towarzyszace", "Imiona i nazwiska osób towarzyszących", inp("towarzyszace", { type: "text", placeholder: "np. Jan Kowalski" })));
+    if (f.dieta !== false) form.append(field("dieta", "Dieta, alergie", inp("dieta", { type: "text", placeholder: "np. wegetariańska, bez glutenu" })));
+    if (f.nocleg !== false) form.append(el("label", { class: "choice choice--single" }, [el("input", { type: "checkbox", name: "nocleg", value: "1" }), el("span", { text: "Chcemy skorzystać z noclegu w pałacu" })]));
+    if (f.piosenka !== false) form.append(field("piosenka", "Piosenka, przy której na pewno zatańczycie", inp("piosenka", { type: "text" })));
+    if (f.telefon) form.append(field("telefon", "Telefon kontaktowy", inp("telefon", { type: "tel", autocomplete: "tel" })));
+    if (f.wiadomosc !== false) form.append(field("wiadomosc", "Wiadomość dla nas", el("textarea", { name: "wiadomosc", class: "input", rows: "2" })));
+    if (has(r.kod)) form.append(field("kod", "Kod z zaproszenia *", inp("kod", { type: "text", required: "", autocomplete: "off", autocapitalize: "characters" })));
+
+    const status = el("p", { class: "rsvp-form__status", role: "status", "aria-live": "polite" });
+    const submit = el("button", { type: "submit", class: "btn btn--primary", text: "Wyślij potwierdzenie" });
+    form.append(el("div", { class: "actions actions--center" }, submit), status);
+
+    const storeKey = "rsvp:" + (r.endpoint || "");
+    const done = localStorage.getItem(storeKey);
+    if (done) { status.textContent = `Zgłoszenie dla „${done}” zostało już wysłane. Możesz je poprawić, wysyłając ponownie.`; }
+
+    /** Treść zgłoszenia jako tekst (fallback SMS / e-mail, gdy nie ma arkusza). */
+    const asText = (d) => [
+      `Potwierdzenie obecności: ${d.obecnosc === "nie" ? "NIE" : "TAK"}`,
+      `Imię i nazwisko: ${d.imie}`,
+      d.osoby ? `Liczba osób: ${d.osoby}` : "",
+      d.towarzyszace ? `Osoby towarzyszące: ${d.towarzyszace}` : "",
+      d.dieta ? `Dieta: ${d.dieta}` : "",
+      d.nocleg ? "Nocleg: TAK" : "",
+      d.piosenka ? `Piosenka: ${d.piosenka}` : "",
+      d.telefon ? `Telefon: ${d.telefon}` : "",
+      d.wiadomosc ? `Wiadomość: ${d.wiadomosc}` : "",
+    ].filter(Boolean).join("\n");
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.imie = String(data.imie || "").trim().replace(/\s+/g, " ");
+      if (data.imie.split(" ").length < 2) { status.textContent = "Podaj imię i nazwisko."; form.imie.focus(); return; }
+      if (has(r.kod) && String(data.kod || "").trim().toUpperCase() !== String(r.kod).toUpperCase()) { status.textContent = "Kod z zaproszenia się nie zgadza."; form.kod.focus(); return; }
+
+      if (!has(r.endpoint)) {
+        /* Brak arkusza: otwórz SMS (telefon) lub e-mail z gotową treścią zgłoszenia. */
+        const txt = encodeURIComponent(asText(data));
+        if (has(r.telefon)) window.location.href = "sms:" + telHref(r.telefon).slice(4) + "?body=" + txt;
+        else if (has(r.email)) window.location.href = "mailto:" + r.email + "?subject=" + encodeURIComponent("Potwierdzenie obecności") + "&body=" + txt;
+        else { status.textContent = "Formularz nie jest jeszcze podłączony. Napisz do nas bezpośrednio."; return; }
+        status.textContent = "Otwieramy wiadomość z gotową treścią. Wystarczy ją wysłać.";
+        localStorage.setItem(storeKey, data.imie);
+        return;
+      }
+
+      submit.disabled = true; status.textContent = "Wysyłamy…";
+      try {
+        /* Apps Script nie zwraca nagłówków CORS dla POST, dlatego tryb no-cors:
+           odpowiedzi nie odczytamy, ale zapis w arkuszu się wykona. Walidacja jest po naszej stronie. */
+        await fetch(r.endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(data) });
+        localStorage.setItem(storeKey, data.imie);
+        form.replaceChildren(el("p", { class: "rsvp-form__thanks", text: r.podziekowanie || "Dziękujemy! Zapisaliśmy Wasze zgłoszenie." }));
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Nie udało się wysłać. Spróbuj ponownie albo napisz do nas SMS.";
+        submit.disabled = false;
+      }
+    });
+    return form;
+  }
+
   function renderMain(c, start) {
     const app = $("app");
     app.textContent = "";
@@ -147,16 +229,16 @@
       app.append(section("o-nas", "", el("div", { class: "split" }, [text, photo(o.zdjecie, o.zdjecie_podpis)])));
     }
 
-    /* Gdzie — jeden akapit, jedna mapa */
+    /* Gdzie: jeden akapit, jedna mapa, akwarela bez ramki */
     const m = c.miejsce || {};
     if (has(m.nazwa) || has(m.adres) || has(m.opis)) {
       const text = el("div", { class: "split__text" }, [
-        has(m.nazwa) ? el("p", { class: "meta" }, el("strong", { text: "📍 " + m.nazwa })) : "",
-        has(m.adres) ? el("p", { class: "meta", text: m.adres }) : "",
+        has(m.nazwa) ? el("h3", { class: "place__name", text: m.nazwa }) : "",
+        has(m.adres) ? el("p", { class: "meta place__addr", text: m.adres }) : "",
         has(m.opis) ? para(m.opis) : "",
         has(m.adres) ? el("div", { class: "actions" }, linkBtn(mapsUrl([m.nazwa, m.adres].filter(has).join(", ")), "Pokaż na mapie")) : "",
       ]);
-      const body = has(m.zdjecie) ? el("div", { class: "split split--flip" }, [text, photo(m.zdjecie, m.nazwa, true)]) : text;
+      const body = has(m.zdjecie) ? el("div", { class: "split split--flip" }, [text, artwork(m.zdjecie, m.nazwa)]) : text;
       app.append(section("miejsce", m.tytul || "Gdzie?", body));
     }
 
@@ -167,16 +249,19 @@
         plan.pozycje.map((p) => el("li", null, [el("time", { text: p.godzina }), para(p.opis)])))));
     } else $("nav").querySelector('[data-section="plan"]').hidden = true;
 
-    /* RSVP — jednym kliknięciem */
+    /* RSVP: formularz (zapis do arkusza, a bez endpointu SMS/e-mail z gotową treścią) */
     const r = c.rsvp || {};
-    if (has(r.link_tak) || has(r.link_nie) || has(r.telefon) || has(r.email) || has(r.tekst) || has(r.wstep)) {
+    if (has(r.endpoint) || has(r.link_tak) || has(r.link_nie) || has(r.telefon) || has(r.email) || has(r.tekst) || has(r.wstep)) {
       const termin = has(r.termin) ? parseLocal(r.termin) : null;
       const body = has(r.sms_tekst) ? encodeURIComponent(r.sms_tekst) : "";
+      const showForm = r.formularz !== false;
       const btns = [];
-      if (has(r.link_tak)) btns.push(linkBtn(r.link_tak, "Będę!", true));
-      if (has(r.link_nie)) btns.push(linkBtn(r.link_nie, "Niestety nie dam rady"));
+      if (!showForm) {
+        if (has(r.link_tak)) btns.push(linkBtn(r.link_tak, "Będę!", true));
+        if (has(r.link_nie)) btns.push(linkBtn(r.link_nie, "Niestety nie dam rady"));
+      }
       if (has(r.telefon)) {
-        btns.push(linkBtn("sms:" + telHref(r.telefon).slice(4) + (body ? "?body=" + body : ""), "Potwierdź SMS-em", !btns.length));
+        btns.push(linkBtn("sms:" + telHref(r.telefon).slice(4) + (body ? "?body=" + body : ""), "Potwierdź SMS-em", !btns.length && !showForm));
         btns.push(linkBtn(telHref(r.telefon), "Zadzwoń"));
       }
       if (has(r.email)) btns.push(linkBtn("mailto:" + r.email + "?subject=" + encodeURIComponent("Potwierdzenie obecności") + (body ? "&body=" + body : ""), "Napisz e-mail"));
@@ -184,7 +269,11 @@
         has(r.wstep) ? para(r.wstep) : "",
         termin ? el("p", { class: "meta" }, ["Potwierdźcie swoją obecność do ", el("strong", { text: DATE_FMT.format(termin) }), "."]) : "",
         has(r.tekst) ? para(r.tekst) : "",
-        btns.length ? el("div", { class: "actions actions--center" }, btns) : "",
+        showForm ? rsvpForm(r) : "",
+        btns.length ? el("div", { class: "rsvp__alt" }, [
+          showForm ? el("p", { class: "meta", text: "Wolisz inaczej? Napisz lub zadzwoń:" }) : "",
+          el("div", { class: "actions actions--center" }, btns),
+        ]) : "",
       ])));
     } else $("nav").querySelector('[data-section="rsvp"]').hidden = true;
 
@@ -210,7 +299,7 @@
       ])));
     }
 
-    /* Przydatne informacje — każdy punkt rozwijany */
+    /* Przydatne informacje: każdy punkt rozwijany */
     const inf = c.informacje || {};
     const items = (inf.pozycje || []).filter((q) => has(q.pytanie) && has(q.odpowiedz));
     if (items.length) {
@@ -222,7 +311,7 @@
         ])))));
     } else $("nav").querySelector('[data-section="informacje"]').hidden = true;
 
-    /* Kontakt — Para Młoda */
+    /* Kontakt: Para Młoda */
     const k = c.kontakt || {};
     if (has(k.osoby)) {
       app.append(section("kontakt", k.tytul || "Kontakt", el("div", null, [
