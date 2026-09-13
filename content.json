@@ -5,68 +5,123 @@
     "on": "Marcin",
     "on_nazwisko": "Januszewicz"
   },
-  "zaproszenie": "z radością zapraszają",
-  "obraz": "img/palac.png",
-  "obraz_podpis": "Pałac Romantyczny w Turznie",
   "data": "2027-08-21T15:00:00",
-  "motto": "na uroczystość zaślubin oraz wesele, które odbędą się w dniu",
-  "wstep": "W trosce o Wasz komfort zebraliśmy tu wszystkie dodatkowe informacje — m.in. o noclegach i planie uroczystości. Strona będzie uzupełniana, warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
-
-  "miejsce": {
-    "tytul": "Ceremonia i wesele",
-    "nazwa": "Pałac Romantyczny w Turznie",
-    "adres": "Toruńska 1, 87-148 Turzno",
-    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie Pałacu Romantycznego w Turznie. Zaraz po ceremonii, w tym samym miejscu, zapraszamy na przyjęcie weselne — nie trzeba się nigdzie przemieszczać ani szukać parkingu po raz drugi."
+  "hero": {
+    "tlo": "img/palac.png",
+    "podtytul": "bierzemy ślub"
   },
 
-  "plan": [
-    { "godzina": "15:00", "opis": "Ceremonia zaślubin w kaplicy pałacowej" }
-  ],
+  "o_nas": {
+    "tytul": "Cześć!",
+    "tekst": "Już niedługo widzimy się na naszym ślubie. Mamy nadzieję, że tak jak my, nie możecie się doczekać tego dnia. Zebraliśmy tu wszystko, co może się Wam przydać — od dojazdu po noclegi. Strona będzie uzupełniana, więc warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
+    "zdjecie": "",
+    "zdjecie_podpis": "[DO UZUPEŁNIENIA] nasze zdjęcie — pion, ok. 1200×1500 px"
+  },
+
+  "miejsce": {
+    "tytul": "Gdzie?",
+    "nazwa": "Pałac Romantyczny w Turznie",
+    "adres": "Toruńska 1, 87-148 Turzno",
+    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie pałacu. Zaraz po ceremonii, w tym samym miejscu, zapraszamy na przyjęcie weselne — nie trzeba się nigdzie przemieszczać.",
+    "zdjecie": "img/palac.png"
+  },
+
+  "plan": {
+    "tytul": "Harmonogram",
+    "pozycje": [
+      { "godzina": "15:00", "opis": "Ceremonia zaślubin w kaplicy pałacowej" },
+      { "godzina": "16:00", "opis": "[DO UZUPEŁNIENIA] gratulacje, toast i sesja z gośćmi" },
+      { "godzina": "17:00", "opis": "[DO UZUPEŁNIENIA] obiad weselny" },
+      { "godzina": "21:00", "opis": "[DO UZUPEŁNIENIA] tort" },
+      { "godzina": "00:00", "opis": "[DO UZUPEŁNIENIA] oczepiny" },
+      { "godzina": "04:00", "opis": "[DO UZUPEŁNIENIA] zakończenie zabawy" }
+    ]
+  },
 
   "rsvp": {
+    "tytul": "Potwierdzenie obecności",
+    "wstep": "Pomóżcie nam dobrze policzyć krzesła, talerze i kawałki tortu!",
     "termin": "2027-04-30",
-    "tekst": "Uprzejmie prosimy o potwierdzenie przybycia do 30.04.2027 r. Dajcie nam też znać o diecie wegetariańskiej lub alergiach.",
+    "tekst": "Dajcie nam też znać o diecie wegetariańskiej lub alergiach.",
     "link_tak": "",
     "link_nie": "",
-    "telefon": "",
+    "telefon": "+48 000 000 001",
     "sms_tekst": "Potwierdzam obecność na ślubie Agnieszki i Marcina 21.08.2027 r. Imię i nazwisko: ",
     "email": ""
   },
 
-  "nocleg": [
-    {
-      "nazwa": "Pałac Romantyczny w Turznie",
-      "adres": "Toruńska 1, 87-148 Turzno",
-      "telefon": "",
-      "link": "",
-      "uwagi": "Szczegóły dotyczące noclegów podamy wkrótce."
-    }
-  ],
+  "nocleg": {
+    "tytul": "Noclegi",
+    "wstep": "",
+    "pozycje": [
+      {
+        "nazwa": "Pałac Romantyczny w Turznie",
+        "adres": "Toruńska 1, 87-148 Turzno",
+        "telefon": "",
+        "link": "",
+        "uwagi": "Szczegóły dotyczące noclegów podamy wkrótce."
+      }
+    ]
+  },
 
-  "praktyczne": [
-    {
-      "tytul": "Prezenty",
-      "tekst": "Wasza obecność to dla nas największy prezent! Jeśli jednak zechcecie podarować nam coś więcej, będziemy wdzięczni za wkład w spełnienie naszych marzeń — zamiast prezentu koperta, a zamiast kwiatów zdrapka.",
-      "link": "",
-      "link_tekst": ""
-    },
-    { "tytul": "Dojazd i parking", "tekst": "", "link": "", "link_tekst": "" },
-    { "tytul": "Dress code", "tekst": "", "link": "", "link_tekst": "" },
-    { "tytul": "Poprawiny", "tekst": "", "link": "", "link_tekst": "" },
-    { "tytul": "Zdjęcia", "tekst": "", "link": "", "link_tekst": "" },
-    { "tytul": "Muzyka", "tekst": "", "link": "", "link_tekst": "" }
-  ],
+  "informacje": {
+    "tytul": "Przydatne informacje",
+    "pozycje": [
+      {
+        "pytanie": "Czy będzie parking?",
+        "odpowiedz": "[DO POTWIERDZENIA] Tak, na terenie pałacu jest bezpłatny parking dla gości."
+      },
+      {
+        "pytanie": "Jak dojechać?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Turzno leży ok. 15 km od Torunia. Najbliższa stacja PKP: Toruń Główny, lotnisko: Bydgoszcz. Jeśli zorganizujemy bus zbiorczy z Torunia, podamy tu godziny."
+      },
+      {
+        "pytanie": "Jak się ubrać?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Elegancko — bez sztywnego dress code'u. Mamy jedną prośbę: unikajcie bieli i bardzo jasnych sukienek."
+      },
+      {
+        "pytanie": "Czy mogę przyjść z dzieckiem?",
+        "odpowiedz": "Ten wyjątkowy wieczór spędzimy tylko w gronie dorosłych — mamy nadzieję, że odpoczniecie od codziennych obowiązków."
+      },
+      {
+        "pytanie": "Co zamiast kwiatów i prezentów?",
+        "odpowiedz": "Wasza obecność to dla nas największy prezent! Jeśli jednak zechcecie podarować nam coś więcej, będziemy wdzięczni za wkład w spełnienie naszych marzeń — zamiast prezentu koperta, a zamiast kwiatów zdrapka lub los na loterię."
+      },
+      {
+        "pytanie": "Czy będą poprawiny?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Tak, w niedzielę 22 sierpnia od godziny 14:00 w pałacu — zapraszamy wszystkich, którzy zostaną na noc."
+      },
+      {
+        "pytanie": "Gdzie wrzucić zdjęcia z wesela?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Do wspólnego albumu — link pojawi się tu w dniu ślubu. Podczas ceremonii prosimy o telefony w kieszeniach, resztą zajmie się fotograf.",
+        "link": "",
+        "link_tekst": "Dodaj zdjęcia"
+      },
+      {
+        "pytanie": "Mogę zamówić piosenkę?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Jasne! Wpiszcie utwór, przy którym na pewno zatańczycie, w formularzu potwierdzenia — DJ dostanie listę.",
+        "link": "",
+        "link_tekst": ""
+      },
+      {
+        "pytanie": "Co, jeśli nie mogę przyjść mimo potwierdzenia?",
+        "odpowiedz": "Zupełnie to rozumiemy. Wystarczy krótka wiadomość, że Was nie będzie — bardzo ułatwi nam to organizację."
+      },
+      {
+        "pytanie": "O której być na miejscu?",
+        "odpowiedz": "[DO UZUPEŁNIENIA] Najlepiej ok. 14:30, żeby spokojnie zająć miejsce w kaplicy przed rozpoczęciem ceremonii."
+      }
+    ]
+  },
 
-  "faq": [
-    { "pytanie": "Czy mogę przyjść z dzieckiem?", "odpowiedz": "Ten wyjątkowy wieczór spędzimy tylko w gronie dorosłych — mamy nadzieję, że odpoczniecie od codziennych obowiązków." },
-    { "pytanie": "Czy ceremonia i wesele są w tym samym miejscu?", "odpowiedz": "Tak — ślub odbywa się w kaplicy na terenie pałacu, a wesele w jego salach. Wszystko pod jednym adresem: Toruńska 1, Turzno." },
-    { "pytanie": "Co zamiast kwiatów i prezentów?", "odpowiedz": "Zamiast prezentu ucieszy nas koperta, a zamiast kwiatów — zdrapka lub los na loterię." }
-  ],
-
-  "kontakt": [
-    { "rola": "Świadkowa", "imie": "Katarzyna Lamparska", "telefon": "+48 000 000 001" },
-    { "rola": "Świadek", "imie": "Paweł Januszewicz", "telefon": "+48 000 000 002" }
-  ],
+  "kontakt": {
+    "tytul": "Kontakt",
+    "wstep": "Macie pytania albo chcecie coś zaktualizować? Jesteśmy do Waszej dyspozycji!",
+    "osoby": [
+      { "imie": "Agnieszka", "telefon": "+48 000 000 001", "zdjecie": "" },
+      { "imie": "Marcin", "telefon": "+48 000 000 002", "zdjecie": "" }
+    ]
+  },
 
   "stopka": "Do zobaczenia w Turznie!"
 }

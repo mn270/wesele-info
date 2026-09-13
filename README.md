@@ -48,6 +48,49 @@ elastyczną listę `praktyczne`, RSVP z polami `link_tak`/`link_nie`/`sms_tekst`
 świadków; `app.js` nie dubluje mapy; `styles.css` rozciąga pojedyncze karty na pełną
 szerokość. Szczegóły w sekcjach „Potwierdzenie obecności jednym kliknięciem” i „Pola do oceny”.
 
+### Etap 4 — strona „o nas” zamiast drugiego zaproszenia (inspiracja: nataliajakubbioraslub.pl)
+
+> Nasza strona za bardzo wygląda jak zaproszenie, a ma być jego dodatkiem — bardziej „o nas”.
+> Zainspiruj się https://nataliajakubbioraslub.pl/: pełnoekranowa okładka z tłem (u nas
+> akwarela pałacu) i czytelnym napisem, czyj to ślub; okładka jest przypięta, a reszta treści
+> nasuwa się na nią przy przewijaniu. Przygotuj placeholder na nasze zdjęcie (jak tam).
+> Sprawdź, czego nam brakuje względem tej strony i jak oni zbierają potwierdzenia. Usuń
+> dublowanie treści: „co zamiast prezentów” było w FAQ i w praktycznych informacjach. Każdy
+> punkt informacji ma się rozwijać. W kontakcie zamień świadków na Agnieszkę i Marcina.
+> Pokaż dotąd ukryte pola z przykładowym (pseudo) wypełnieniem — w następnym kroku ocenimy,
+> które zostawić, a które usunąć. Adres w QR bez zmian.
+
+Co z tego wynikło (nowy `index.html`, `styles.css`, `app.js`, `content.json`):
+
+- **Okładka** (`.hero`, `position: sticky`) na 100 % wysokości ekranu: akwarela pałacu jako
+  tło z miękkim rozjaśnieniem pod napisem, imiona kaligrafią, data z złotą kreską, strzałka
+  „↓”. Arkusz z treścią (`.sheet`) ma wyższy `z-index` i cień, więc **nasuwa się na okładkę**
+  przy przewijaniu — ten sam efekt co u Natalii i Jakuba, bez JavaScriptu.
+- **Nawigacja** przypięta u góry (Start · Harmonogram · Potwierdzenie · Informacje · Kontakt),
+  podświetla aktywną sekcję; linki do pustych sekcji znikają same.
+- **„Cześć!”** — sekcja o nas: tekst + odliczanie + przycisk kalendarza po lewej, po prawej
+  **placeholder na zdjęcie** (`o_nas.zdjecie`; pusty = kreskowana ramka „Tu będzie nasze
+  zdjęcie”). Wgraj plik do `img/` (pion, ok. 1200×1500 px) i wpisz ścieżkę.
+- **Gdzie?** — jeden akapit + akwarela pałacu w ramce + jeden przycisk mapy.
+- **Harmonogram** — pionowa oś czasu; **Przydatne informacje** — każdy punkt rozwijany
+  (`<details>`), duplikat o prezentach usunięty (został tylko w FAQ); **Kontakt** — Agnieszka
+  i Marcin z awatarami-inicjałami (można podać `zdjecie`).
+- **Znacznik review**: każdy tekst zaczynający się od `[DO UZUPEŁNIENIA]` lub
+  `[DO POTWIERDZENIA]` dostaje na stronie żółtą etykietę. Wystarczy usunąć prefiks w
+  `content.json`, gdy treść jest zatwierdzona. Dzięki temu na etapie testów widzą to wszyscy,
+  a nic nie trzeba później „odkrywać”.
+
+**Czego brakowało względem strony referencyjnej i co z tym zrobiono:** nawigacja (dodana),
+sekcja „o nas” ze zdjęciem (dodana), harmonogram jako oś czasu (dodany), kontakt z awatarami
+(dodany), kolejne FAQ typu „czy będzie parking”, „co jeśli nie mogę przyjść mimo
+potwierdzenia” (dodane). U nich RSVP działa przez **6-cyfrowy kod z zaproszenia** wpisywany
+na stronie — wymaga backendu (Next.js) i listy gości z kodami. Zalety: zero anonimowych
+zgłoszeń, gość widzi tylko swoje pola. Wady: koszt hostingu, druk unikalnych kodów na każdym
+zaproszeniu, obsługa „zgubiłem kod”. **Rekomendacja bez zmian:** Google Forms („Będę!” /
+„Nie dam rady”) + SMS z gotową treścią jako fallback; jeśli zależy Wam na odcięciu
+przypadkowych zgłoszeń, do formularza można dodać proste pole „kod z zaproszenia” (jeden
+wspólny, np. `TURZNO2027`) — bez żadnego backendu.
+
 ## Decyzja: GitHub Pages + statyczna strona z treścią w `content.json`
 
 | Kryterium | GitHub Pages (wybrane) | Google Sites | Netlify + Decap CMS |
@@ -150,9 +193,11 @@ Na trzeciej karcie zaproszenia jest greige'owe pole (`#b6b3a2`) przeznaczone na 
    uwagi do **estetyki** w zmiennych na górze `styles.css` (kolory, fonty).
 3. Każdy commit na `main` publikuje się automatycznie pod tym samym adresem — QR nie wymaga zmian.
 
-> **Zaslepki do podmiany przed wysyłką zaproszeń:** numery świadków w `kontakt`
-> (`+48 000 000 001/002`) są celowo niepoprawne (polskie numery nie zaczynają się od 0), żeby
-> nikt przypadkiem nie zadzwonił do obcej osoby podczas testów.
+> **Zaslepki do podmiany przed wysyłką zaproszeń:** numery Agnieszki i Marcina w `kontakt`
+> oraz `rsvp.telefon` (`+48 000 000 001/002`) są celowo niepoprawne (polskie numery nie
+> zaczynają się od 0), żeby nikt przypadkiem nie zadzwonił do obcej osoby podczas testów.
+> Teksty z prefiksem `[DO UZUPEŁNIENIA]` / `[DO POTWIERDZENIA]` to propozycje planera — na
+> stronie mają żółtą etykietę, dopóki prefiks nie zostanie usunięty.
 
 ## Potwierdzenie obecności jednym kliknięciem — opinia i integracja
 
@@ -176,36 +221,42 @@ Pages nie ma backendu), więc „kliknięcie” musi trafić do darmowego serwis
    kliknij *Pobierz link* i wklej go do `content.json` jako `rsvp.link_tak`. Powtórz dla „Nie”
    → `rsvp.link_nie`. Strona sama pokaże przyciski **„Będę!”** i **„Niestety nie dam rady”**;
    gość klika, dopisuje tylko nazwisko i liczbę osób.
-3. Fallback dla osób bez ochoty na formularz: wpisz `rsvp.telefon` (np. świadkowej) — pojawi się
-   przycisk **„Potwierdź SMS-em”** z gotową treścią z `rsvp.sms_tekst` (gość dopisuje nazwisko).
-4. Bez żadnego z tych pól sekcja pokazuje tylko tekst prośby — tak jest teraz, do czasu
-   założenia formularza.
+3. Fallback dla osób bez ochoty na formularz: `rsvp.telefon` (teraz zaslepka) — pojawia się
+   przycisk **„Potwierdź SMS-em”** z gotową treścią z `rsvp.sms_tekst` (gość dopisuje nazwisko)
+   oraz **„Zadzwoń”**.
+4. Bez żadnego z tych pól sekcja pokazuje tylko tekst prośby.
 
 Adres strony w QR jest niezależny od tego, którą opcję wybierzesz — linki formularza są tylko
 w `content.json`.
 
 ## Pola do oceny (propozycje planera)
 
-W `content.json` w liście `praktyczne` są już przygotowane puste pozycje — **puste są ukryte**,
-wystarczy wpisać tekst. Do decyzji:
+Od etapu 4 propozycje **są widoczne na stronie** z żółtą etykietą (prefiks `[DO UZUPEŁNIENIA]`
+lub `[DO POTWIERDZENIA]` w `content.json`). Decyzja dla każdej: **zostaw** (usuń prefiks,
+popraw treść), **usuń** (skasuj pozycję z listy) lub **uzupełnij później** (zostaw prefiks).
 
-| Pole | Po co | Sugestia treści |
-|---|---|---|
-| **Dojazd i parking** | najczęstsze pytanie gości z daleka | czy parking na terenie pałacu jest bezpłatny; dojazd z Torunia (~15 km), PKP Toruń Główny, lotnisko Bydgoszcz; ewentualny bus zbiorczy |
-| **Dress code** | unika niezręczności | np. „elegancko; unikamy bieli i kremu”, ewentualna paleta kolorów |
-| **Poprawiny** | czy są, gdzie i o której | data/godzina/miejsce; czy dla wszystkich gości |
-| **Zdjęcia** | zbiór zdjęć od gości | link do wspólnego albumu Google Photos + `link_tekst: "Dodaj zdjęcia"`; prośba o telefony w kieszeni podczas ceremonii (unplugged) |
-| **Muzyka** | angażuje gości | link do formularza/playlisty „piosenka, przy której zatańczysz” |
-| Plan dnia (rozszerzenie) | orientacja dla gości i dostawców | 15:00 ceremonia · ~16:00 gratulacje i sesja · 17:00 obiad · tort · oczepiny ok. 24:00 · zakończenie |
-| Noclegi (uzupełnienie) | logistyka | telefon recepcji, hasło rezerwacyjne / pula pokoi, godziny check-in/out, cena, alternatywne hotele w Toruniu |
-| FAQ (rozszerzenie) | odciąża telefon świadków | „Czy mogę przyjść z osobą towarzyszącą?”, „O której być w kaplicy?” (sugestia: 20 min przed), „Czy ceremonia jest w środku, czy w plenerze?”, „Do której trwa wesele?” |
-| Kontakt | odpowiedzialności | dopisać do świadków rólę, np. „Sprawy organizacyjne w dniu ślubu”; opcjonalnie koordynator z pałacu |
+| Gdzie | Pozycja | Po co | Co trzeba wiedzieć |
+|---|---|---|---|
+| `plan.pozycje` | 16:00 gratulacje · 17:00 obiad · 21:00 tort · 00:00 oczepiny · 04:00 koniec | orientacja gości; typowy przebieg | godziny od pałacu / DJ-a |
+| `informacje` | Czy będzie parking? | najczęstsze pytanie | potwierdzić w pałacu (bezpłatny? ile miejsc?) |
+| `informacje` | Jak dojechać? | goście z daleka | czy będzie bus z Torunia; PKP/lotnisko |
+| `informacje` | Jak się ubrać? | unika niezręczności | decyzja Pary: dress code / paleta / „bez bieli” |
+| `informacje` | Czy będą poprawiny? | logistyka noclegu | data, godzina, dla kogo |
+| `informacje` | Gdzie wrzucić zdjęcia? | wspólny album | link Google Photos (`link`, `link_tekst`) |
+| `informacje` | Mogę zamówić piosenkę? | angażuje gości | pole w formularzu RSVP lub osobny link |
+| `informacje` | O której być na miejscu? | punktualność w kaplicy | sugestia: 30 min przed |
+| `o_nas.zdjecie` | placeholder zdjęcia | strona „o nas” | plik do `img/`, pion ok. 1200×1500 px |
+| `kontakt.osoby[].zdjecie` | awatary | jak na stronie referencyjnej | kwadratowe zdjęcia ok. 400×400 px (opcjonalnie) |
+| `nocleg.pozycje[0]` | telefon recepcji, link, hasło rezerwacji | logistyka | dane z pałacu |
 
-Celowo **nie dodano**: numeru konta (w Polsce koperta), listy prezentów, sekcji „o nas” — to
-nie jest informacja użytkowa dla gościa i wydłuża stronę skanowaną na telefonie.
+Zatwierdzone już treści (bez prefiksu): dzieci, prezenty/kwiaty, „co jeśli nie mogę przyjść
+mimo potwierdzenia”, miejsce, ceremonia 15:00.
+
+Celowo **nie dodano**: numeru konta (w Polsce koperta), listy prezentów — to nie jest
+informacja użytkowa dla gościa.
 
 Do uzupełnienia w `content.json`, gdy będzie wiadomo: linki formularza RSVP, prawdziwe numery
-świadków, godzina rozpoczęcia wesela i plan dnia, szczegóły noclegów oraz pozycje z tabeli powyżej.
+telefonów, zdjęcie Pary, decyzje z tabeli powyżej.
 
 ## Jak edytować treść (dla osoby nietechnicznej)
 1. Wejdź na github.com → repozytorium → plik `content.json` → ikona ołówka.

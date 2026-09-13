@@ -5,36 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Informacje weselne</title>
-  <meta name="description" content="Najważniejsze informacje dla gości weselnych: miejsce, godzina, plan dnia, potwierdzenie przybycia, noclegi.">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Najważniejsze informacje dla gości weselnych: miejsce, godzina, harmonogram, potwierdzenie obecności, noclegi.">
+  <meta name="theme-color" content="#f7f4ec">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Allison&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="frame">
-    <header class="hero" id="hero">
-      <h1 class="hero__names" id="names" aria-label="Para młoda">…</h1>
-      <p class="hero__surnames" id="surnames"></p>
-      <p class="hero__eyebrow" id="eyebrow">z radością zapraszają</p>
-      <figure class="hero__figure" id="figure" hidden>
-        <figcaption class="hero__caption" id="caption"></figcaption>
-        <img class="hero__image" id="image" alt="" decoding="async">
-      </figure>
-      <p class="hero__lead" id="motto"></p>
+  <nav class="nav" id="nav" aria-label="Sekcje strony">
+    <a href="#top" class="nav__link">Start</a>
+    <a href="#plan" class="nav__link" data-section="plan">Harmonogram</a>
+    <a href="#rsvp" class="nav__link nav__link--accent" data-section="rsvp">Potwierdzenie</a>
+    <a href="#informacje" class="nav__link" data-section="informacje">Informacje</a>
+    <a href="#kontakt" class="nav__link" data-section="kontakt">Kontakt</a>
+  </nav>
+
+  <!-- Pełnoekranowa „okładka” — przypięta; treść poniżej nasuwa się na nią -->
+  <header class="hero" id="top">
+    <div class="hero__bg" id="hero-bg" aria-hidden="true"></div>
+    <div class="hero__content">
+      <h1 class="hero__names" id="names">…</h1>
+      <p class="hero__sub" id="hero-sub"></p>
       <p class="hero__date" id="date"></p>
       <p class="hero__weekday" id="weekday"></p>
-      <div class="countdown" id="countdown" hidden></div>
-      <div class="hero__actions" id="hero-actions"></div>
-    </header>
+    </div>
+    <a class="hero__arrow" href="#o-nas" aria-label="Przewiń do treści">↓</a>
+  </header>
 
-    <main id="app" class="container">
-      <p class="loading" id="loading">Wczytywanie…</p>
-    </main>
+  <main class="sheet" id="app">
+    <p class="loading" id="loading">Wczytywanie…</p>
+  </main>
 
-    <footer class="footer" id="footer"></footer>
-  </div>
+  <footer class="footer" id="footer"></footer>
 
   <noscript>
     <p class="loading">Ta strona wymaga włączonego JavaScriptu.</p>
