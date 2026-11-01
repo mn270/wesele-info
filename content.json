@@ -14,15 +14,15 @@
   "o_nas": {
     "tytul": "Kochani",
     "tekst": "Już niedługo widzimy się na naszym ślubie. Mamy nadzieję, że tak jak my, nie możecie się doczekać tego dnia. Zebraliśmy tu wszystko, co może się Wam przydać: od dojazdu po noclegi. Strona będzie uzupełniana, więc warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
-    "zdjecie": "",
-    "zdjecie_podpis": "[DO UZUPEŁNIENIA] nasze zdjęcie, pion, ok. 1200x1500 px"
+    "zdjecie": "img/my.jpg",
+    "zdjecie_podpis": ""
   },
 
   "miejsce": {
     "tytul": "Gdzie?",
     "nazwa": "Pałac Romantyczny w Turznie",
     "adres": "Toruńska 1, 87-148 Turzno",
-    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie pałacu. Zaraz po ceremonii, w tym samym miejscu, zapraszamy na przyjęcie weselne. Nie trzeba się nigdzie przemieszczać.",
+    "opis": "Zaślubiny odbędą się o godzinie 15:00 w kaplicy na terenie pałacu. Po ceremonii, serdecznie zapraszamy na wesele.",
     "zdjecie": "img/palac.png"
   },
 
@@ -62,7 +62,7 @@
     "podziekowanie_nie": "Dziękujemy za wiadomość. Szkoda, że się nie zobaczymy, ale rozumiemy.",
     "link_tak": "",
     "link_nie": "",
-    "telefon": "+48 000 000 001",
+    "telefon": "+48 505 317 419",
     "sms_tekst": "Potwierdzam obecność na ślubie Agnieszki i Marcina 21.08.2027 r. Imię i nazwisko: ",
     "email": ""
   },
@@ -139,8 +139,8 @@
     "tytul": "Kontakt",
     "wstep": "Macie pytania albo chcecie coś zmienić w zgłoszeniu? Piszcie lub dzwońcie śmiało.",
     "osoby": [
-      { "imie": "Agnieszka", "telefon": "+48 000 000 001", "zdjecie": "" },
-      { "imie": "Marcin", "telefon": "+48 000 000 002", "zdjecie": "" }
+      { "imie": "Agnieszka", "telefon": "+48 512 273 584", "zdjecie": "" },
+      { "imie": "Marcin", "telefon": "+48 505 317 419", "zdjecie": "" }
     ]
   },
 

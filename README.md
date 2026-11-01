@@ -115,11 +115,13 @@ wesele-info/
 ├── app.js            # wczytuje content.json i buduje sekcje; puste sekcje są ukrywane
 ├── content.json      # <<< JEDYNY PLIK DO EDYCJI — cała treść strony
 ├── img/palac.png     # akwarela pałacu wycięta z zaproszenia
+├── img/my.jpg        # nasze zdjęcie (sekcja „o nas”), z IMG_7684.HEIC przez convert_photo.py
 ├── qr/               # wygenerowane kody QR + URL.txt (blokada adresu)
 ├── .nojekyll         # GitHub Pages serwuje pliki „jak są”
 ├── tools/
 │   ├── make_qr.py          # generuje QR (SVG + PNG + PNG przezroczysty) z adresu strony
 │   ├── extract_palace.py   # jednorazowo: wycina pałac z 1.png zaproszenia
+│   ├── convert_photo.py    # HEIC/JPG/PNG → lekki JPG dla strony, bez EXIF/GPS
 │   └── requirements.txt
 └── .vscode/tasks.json # zadanie „Podgląd lokalny” (http://localhost:8080)
 ```
@@ -147,6 +149,16 @@ python tools/make_qr.py https://mn270.github.io/wesele-info/
 ```
 Powstaną `qr/wesele-qr.svg` (wektor — do drukarni) i `qr/wesele-qr.png`. Przed drukiem zeskanuj
 wersję testową telefonem.
+
+### 4. Zdjęcia z telefonu (HEIC)
+Przeglądarki poza Safari nie wyświetlają HEIC, a oryginał z telefonu zawiera lokalizację GPS.
+Przed dodaniem na stronę przekonwertuj go do JPG:
+```powershell
+pip install -r tools/requirements.txt
+python tools/convert_photo.py img/IMG_7684.HEIC img/my.jpg
+```
+Skrypt obraca zdjęcie wg EXIF, zmniejsza je do 1600 px i zapisuje bez metadanych. Pliki `*.heic`
+są w `.gitignore`, więc oryginały nie trafią do publicznego repozytorium.
 
 ## Adres w QR („hash”) nie może się zmienić — jak to zabezpieczone
 
@@ -329,7 +341,6 @@ popraw treść), **usuń** (skasuj pozycję z listy) lub **uzupełnij później*
 | `informacje` | Gdzie wrzucić zdjęcia? | wspólny album | link Google Photos (`link`, `link_tekst`) |
 | `informacje` | Mogę zamówić piosenkę? | angażuje gości | pole w formularzu RSVP lub osobny link |
 | `informacje` | O której być na miejscu? | punktualność w kaplicy | sugestia: 30 min przed |
-| `o_nas.zdjecie` | placeholder zdjęcia | strona „o nas” | plik do `img/`, pion ok. 1200×1500 px |
 | `kontakt.osoby[].zdjecie` | awatary | jak na stronie referencyjnej | kwadratowe zdjęcia ok. 400×400 px (opcjonalnie) |
 | `nocleg.pozycje[0]` | telefon recepcji, link, hasło rezerwacji | logistyka | dane z pałacu |
 
@@ -339,8 +350,8 @@ mimo potwierdzenia”, miejsce, ceremonia 15:00.
 Celowo **nie dodano**: numeru konta (w Polsce koperta), listy prezentów — to nie jest
 informacja użytkowa dla gościa.
 
-Do uzupełnienia w `content.json`, gdy będzie wiadomo: linki formularza RSVP, prawdziwe numery
-telefonów, zdjęcie Pary, decyzje z tabeli powyżej.
+Do uzupełnienia w `content.json`, gdy będzie wiadomo: linki formularza RSVP, decyzje z tabeli
+powyżej.
 
 ## Jak edytować treść (dla osoby nietechnicznej)
 1. Wejdź na github.com → repozytorium → plik `content.json` → ikona ołówka.

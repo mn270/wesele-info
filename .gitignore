@@ -1,3 +1,7 @@
 __pycache__/
 .venv/
 qr/*.png
+
+# Oryginaly zdjec z telefonu (duze, z GPS) - na strone trafia tylko JPG z tools/convert_photo.py
+*.heic
+*.HEIC
