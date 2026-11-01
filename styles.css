@@ -141,6 +141,9 @@ img { max-width: 100%; display: block; }
 .photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .photo--landscape img { aspect-ratio: 4 / 3; }
 .photo figcaption { margin-top: .5rem; text-align: center; font-family: var(--font-caps); font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.photo__heading { margin: 0 0 .6rem; text-align: center; font-family: var(--font-script); font-size: clamp(2.6rem, 11vw, 3.4rem); line-height: 1.1; color: var(--text); }
+.about { max-width: 34rem; margin: 0 auto; }
+.photo-wrap { max-width: 26rem; margin: 0 auto 2.2rem; }
 .photo__empty {
   aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1.5rem;
   background: repeating-linear-gradient(45deg, #f2efe6 0 10px, #ece8dc 10px 20px);

@@ -59,24 +59,8 @@
     set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* tryb prywatny */ } },
   };
 
-  /* ---------- Kalendarz (.ics) ---------- */
+  /* ---------- Kalendarz Google ---------- */
   const icsStamp = (d) => d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "T" + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
-  const icsEscape = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
-  function buildIcs(c, start) {
-    const end = new Date(start.getTime() + 10 * 60 * 60 * 1000);
-    const m = c.miejsce || {};
-    const location = [m.nazwa, m.adres].filter(has).join(", ");
-    return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//wesele-info//PL", "BEGIN:VEVENT",
-      "UID:" + icsStamp(start) + "@wesele-info",
-      "DTSTAMP:" + icsStamp(new Date()),
-      "DTSTART:" + icsStamp(start),
-      "DTEND:" + icsStamp(end),
-      "SUMMARY:" + icsEscape(`Ślub ${c.para.ona} i ${c.para.on}`),
-      location ? "LOCATION:" + icsEscape(location) : "",
-      "DESCRIPTION:" + icsEscape([m.opis || "", window.location.href].filter(Boolean).join("\n")),
-      "END:VEVENT", "END:VCALENDAR"].filter(Boolean).join("\r\n");
-  }
-  /** Link do Google Kalendarza (na iOS blob+download bywa zawodny). */
   function gcalUrl(c, start) {
     const end = new Date(start.getTime() + 10 * 60 * 60 * 1000);
     const m = c.miejsce || {};
@@ -309,13 +293,14 @@
         start ? countdown(start) : "",
       ]);
       const acts = el("div", { class: "actions actions--center" });
-      if (start) {
-        acts.append(linkBtn(gcalUrl(c, start), "Kalendarz Google"));
-        const blob = new Blob([buildIcs(c, start)], { type: "text/calendar;charset=utf-8" });
-        acts.append(el("a", { class: "btn", href: URL.createObjectURL(blob), download: "slub.ics", text: "Plik .ics (Apple, Outlook)" }));
-      }
+      if (start) acts.append(linkBtn(gcalUrl(c, start), "Kalendarz Google"));
       if (acts.childElementCount) text.append(acts);
-      app.append(section("o-nas", "", el("div", { class: "split" }, [text, photo(o.zdjecie, o.zdjecie_podpis, `${c.para.ona} i ${c.para.on}`)])));
+      /* Zdjęcie z napisem nad tekstem „Kochani”, jedna kolumna */
+      const media = el("div", { class: "photo-wrap" }, [
+        has(o.zdjecie_naglowek) ? el("p", { class: "photo__heading", text: o.zdjecie_naglowek }) : "",
+        photo(o.zdjecie, o.zdjecie_podpis, `${c.para.ona} i ${c.para.on}`),
+      ]);
+      app.append(section("o-nas", "", el("div", { class: "about" }, [media, text])));
     }
 
     /* Gdzie: jeden akapit, jedna mapa, akwarela bez ramki */

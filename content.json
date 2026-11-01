@@ -15,6 +15,7 @@
     "tytul": "Kochani",
     "tekst": "Już niedługo widzimy się na naszym ślubie. Mamy nadzieję, że tak jak my, nie możecie się doczekać tego dnia. Zebraliśmy tu wszystko, co może się Wam przydać: od dojazdu po noclegi. Strona będzie uzupełniana, więc warto zajrzeć tu jeszcze raz przed 21 sierpnia.",
     "zdjecie": "img/my.jpg",
+    "zdjecie_naglowek": "Pobieramy się!",
     "zdjecie_podpis": ""
   },
 
@@ -72,7 +73,7 @@
         "adres": "Toruńska 1, 87-148 Turzno",
         "telefon": "",
         "link": "",
-        "uwagi": "[DO UZUPEŁNIENIA] Dla gości rezerwujemy pokoje w pałacu. W formularzu potwierdzenia zaznaczcie wstępnie, czy chcecie nocować; cenę i sposób rezerwacji podamy wkrótce."
+        "uwagi": "Wszystkim naszym gościom zapewniamy nocleg w pałacu. Prosimy o zaznaczenie w formularzu potwierdzenia, czy chcecie z niego skorzystać."
       }
     ]
   },
@@ -81,48 +82,38 @@
     "tytul": "Przydatne informacje",
     "pozycje": [
       {
-        "pytanie": "O której być na miejscu?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Najlepiej ok. 14:30, żeby spokojnie zająć miejsce w kaplicy przed rozpoczęciem ceremonii."
+        "pytanie": "Jak dojechać?",
+        "odpowiedz": "Turzno leży ok. 15 km od Torunia. Najbliższa stacja PKP: Toruń Główny, lotnisko: Bydgoszcz."
       },
       {
-        "pytanie": "Jak dojechać?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Turzno leży ok. 15 km od Torunia. Najbliższa stacja PKP: Toruń Główny, lotnisko: Bydgoszcz. Jeśli zorganizujemy bus zbiorczy z Torunia, podamy tu godziny."
+        "pytanie": "O której być na miejscu?",
+        "odpowiedz": "[DO UZUPEŁNIENIA]"
       },
       {
         "pytanie": "Czy będzie parking?",
-        "odpowiedz": "[DO POTWIERDZENIA] Tak, na terenie pałacu jest bezpłatny parking dla gości."
+        "odpowiedz": "Tak, na terenie pałacu jest bezpłatny parking dla gości."
+      },
+      {
+        "pytanie": "Kiedy i gdzie możemy odebrać klucze do pokoju?",
+        "odpowiedz": "[DO UZUPEŁNIENIA]"
       },
       {
         "pytanie": "Jak się ubrać?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Elegancko, bez sztywnego dress code'u. Mamy jedną prośbę: unikajcie bieli i bardzo jasnych sukienek."
+        "odpowiedz": "Będzie nam miło, jeśli Panie wybiorą jasne, stonowane kreacje, zamiast intensywnych lub bardzo ciemnych kolorów. Delikatne pastele idealnie wpasują się w klimat wesela, z wyjątkiem bieli, którą pozostawiamy Pannie Młodej."
       },
       {
         "pytanie": "Czy mogę przyjść z dzieckiem?",
         "odpowiedz": "Ten wieczór chcemy spędzić w gronie dorosłych. Mamy nadzieję, że będzie dla Was okazją do beztroskiej zabawy."
       },
       {
-        "pytanie": "Co zamiast kwiatów i prezentów?",
-        "odpowiedz": "Wasza obecność jest dla nas najważniejsza. Jeśli chcecie podarować nam coś jeszcze, zamiast kwiatów ucieszy nas zdrapka lub los na loterię, a zamiast prezentu drobny wkład w nasze wspólne marzenia."
-      },
-      {
         "pytanie": "Czy będą poprawiny?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Tak, w niedzielę 22 sierpnia od godziny 14:00 w pałacu. Zapraszamy wszystkich, nie tylko gości nocujących w pałacu."
-      },
-      {
-        "pytanie": "Czy mogę zamówić piosenkę?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Oczywiście. Wpiszcie utwór, przy którym na pewno zatańczycie, w formularzu potwierdzenia. DJ dostanie listę.",
-        "link": "",
-        "link_tekst": ""
+        "odpowiedz": "[DO UZUPEŁNIENIA] Nie, będzie śniadanie."
       },
       {
         "pytanie": "Gdzie wrzucić zdjęcia z wesela?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Do wspólnego albumu. Link pojawi się tu w dniu ślubu.",
+        "odpowiedz": "Do wspólnego albumu. Link pojawi się tu w dniu ślubu.",
         "link": "",
         "link_tekst": "Dodaj zdjęcia"
-      },
-      {
-        "pytanie": "Czy mogę robić zdjęcia podczas ceremonii?",
-        "odpowiedz": "[DO UZUPEŁNIENIA] Podczas ceremonii prosimy o telefony w kieszeniach. Tym momentem zajmie się fotograf, a Wy będziecie z nami. Potem fotografujcie do woli."
       },
       {
         "pytanie": "Co, jeśli nie mogę przyjść mimo potwierdzenia?",
