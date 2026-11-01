@@ -30,11 +30,7 @@
     "tytul": "Harmonogram",
     "pozycje": [
       { "godzina": "15:00", "opis": "Ceremonia zaślubin w kaplicy pałacowej" },
-      { "godzina": "16:00", "opis": "[DO UZUPEŁNIENIA] gratulacje, toast i sesja z gośćmi" },
-      { "godzina": "17:00", "opis": "[DO UZUPEŁNIENIA] obiad weselny" },
-      { "godzina": "21:00", "opis": "[DO UZUPEŁNIENIA] tort" },
-      { "godzina": "00:00", "opis": "[DO UZUPEŁNIENIA] oczepiny" },
-      { "godzina": "04:00", "opis": "[DO UZUPEŁNIENIA] zakończenie zabawy" }
+      { "godzina": "16:00", "opis": "DALSZE GODZINY DO UZUPEŁNIENIA" }
     ]
   },
 
@@ -42,7 +38,7 @@
     "tytul": "Potwierdzenie obecności",
     "wstep": "Pomóżcie nam dobrze zaplanować stoły i menu.",
     "termin": "2027-04-30",
-    "tekst": "Wystarczy imię i nazwisko z zaproszenia. Jeśli przyjeżdżacie we dwoje lub z bliskimi, podajcie wszystkich w jednym zgłoszeniu.",
+    "tekst": "Wystarczy wpisać imiona i nazwiska z zaproszenia, a resztę informacji w tym dotyczące osoby towarzyszącej w wiadomości, która znajduje się poniżej.",
     "formularz": true,
     "endpoint": "",
     "kod": "",

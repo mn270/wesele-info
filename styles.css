@@ -207,7 +207,7 @@ img { max-width: 100%; display: block; }
 .field__error:empty { display: none; }
 .input[aria-invalid="true"] { border-bottom-color: #8a3b2e; }
 .rsvp-form__yes { display: grid; gap: 1.1rem; }
-.rsvp-form__yes[hidden] { display: none; }
+.rsvp-form__yes[hidden], .field[hidden] { display: none; }
 .rsvp-form__manual p { margin: 0 0 .8rem; text-align: center; }
 .rsvp-form__manual textarea { border: 1px dotted var(--frame); padding: .6rem; font-size: .95rem; }
 .rsvp-form__manual .actions { margin-top: .9rem; }

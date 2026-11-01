@@ -171,20 +171,22 @@
     const form = el("form", { class: "rsvp-form", novalidate: "" });
     const choice = el("fieldset", { class: "field field--choice" }, [
       el("legend", { class: "field__label", text: "Czy będziecie? *" }),
-      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "tak", required: "" }), el("span", { text: "Tak, będziemy" })]),
-      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "nie" }), el("span", { text: "Niestety nie damy rady" })]),
+      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "tak", "data-ile": "2", required: "" }), el("span", { text: "Tak, będziemy" })]),
+      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "tak", "data-ile": "1" }), el("span", { text: "Tak, będę sam/sama" })]),
+      el("label", { class: "choice" }, [el("input", { type: "radio", name: "obecnosc", value: "nie" }), el("span", { text: "Niestety nie dam / nie damy rady" })]),
       el("p", { class: "field__error", role: "alert" }),
     ]);
     form.append(
-      field("imie", "Imię i nazwisko (jak na zaproszeniu) *", inp("imie", { type: "text", required: "", autocomplete: "name", minlength: "3", placeholder: "np. Anna Kowalska" })),
+      field("imie", "Imiona i nazwiska (jak na zaproszeniu) *", inp("imie", { type: "text", required: "", autocomplete: "name", minlength: "3", placeholder: "np. Anna Kowalska lub Anna i Jan Kowalscy" })),
       choice,
     );
     /* Pola tylko dla osób, które będą */
     const onlyIfYes = el("div", { class: "rsvp-form__yes", hidden: "" });
-    if (f.osoby !== false) onlyIfYes.append(field("osoby", "Liczba osób łącznie", inp("osoby", { type: "number", min: "1", max: "10", value: "1", inputmode: "numeric" })));
+    const osobyField = f.osoby !== false ? field("osoby", "Liczba osób łącznie", inp("osoby", { type: "number", min: "2", max: "10", value: "2", inputmode: "numeric" })) : null;
+    if (osobyField) onlyIfYes.append(osobyField);
     if (f.towarzyszace !== false) onlyIfYes.append(field("towarzyszace", "Imiona i nazwiska osób towarzyszących", inp("towarzyszace", { type: "text", placeholder: "np. Jan Kowalski" })));
     if (f.dieta !== false) onlyIfYes.append(field("dieta", "Dieta, alergie", inp("dieta", { type: "text", placeholder: "np. wegetariańska, bez glutenu" })));
-    if (f.nocleg !== false) onlyIfYes.append(el("label", { class: "choice choice--single" }, [el("input", { type: "checkbox", name: "nocleg", value: "1" }), el("span", { text: r.nocleg_etykieta || "Wstępnie chcemy skorzystać z noclegu w pałacu" })]));
+    if (f.nocleg !== false) onlyIfYes.append(el("label", { class: "choice choice--single" }, [el("input", { type: "checkbox", name: "nocleg", value: "1" }), el("span", { text: r.nocleg_etykieta || "Chcemy skorzystać z noclegu w pałacu" })]));
     if (f.piosenka !== false) onlyIfYes.append(field("piosenka", "Piosenka, przy której na pewno zatańczycie", inp("piosenka", { type: "text" })));
     form.append(onlyIfYes);
     if (f.telefon) form.append(field("telefon", "Telefon kontaktowy", inp("telefon", { type: "tel", autocomplete: "tel" })));
@@ -193,7 +195,16 @@
     if (has(r.kod)) form.append(field("kod", "Kod z zaproszenia *", inp("kod", { type: "text", required: "", autocomplete: "off", autocapitalize: "characters" })));
 
     form.addEventListener("change", (ev) => {
-      if (ev.target.name === "obecnosc") { onlyIfYes.hidden = ev.target.value !== "tak"; choice.querySelector(".field__error").textContent = ""; }
+      if (ev.target.name === "obecnosc") {
+        onlyIfYes.hidden = ev.target.value !== "tak";
+        choice.querySelector(".field__error").textContent = "";
+        /* „Tak, będę sam/sama” = 1 osoba, pole liczby osób zbędne; „Tak, będziemy” = co najmniej 2. */
+        if (osobyField) {
+          const solo = ev.target.dataset.ile === "1";
+          osobyField.hidden = solo;
+          if (!solo && Number(form.osoby.value) < 2) form.osoby.value = "2";
+        }
+      }
     });
 
     const status = el("p", { class: "rsvp-form__status", role: "status", "aria-live": "polite" });
@@ -207,7 +218,7 @@
     /** Treść zgłoszenia jako tekst (fallback SMS / e-mail, gdy nie ma arkusza). */
     const asText = (d) => [
       `Potwierdzenie obecności: ${d.obecnosc === "nie" ? "NIE" : "TAK"}`,
-      `Imię i nazwisko: ${d.imie}`,
+      `Imiona i nazwiska: ${d.imie}`,
       d.obecnosc !== "nie" && d.osoby ? `Liczba osób: ${d.osoby}` : "",
       d.towarzyszace ? `Osoby towarzyszące: ${d.towarzyszace}` : "",
       d.dieta ? `Dieta: ${d.dieta}` : "",
@@ -222,8 +233,12 @@
       const data = Object.fromEntries(new FormData(form).entries());
       data.imie = String(data.imie || "").trim().replace(/\s+/g, " ");
       setError(form.imie, "");
-      if (data.imie.split(" ").length < 2) { setError(form.imie, "Podajcie imię i nazwisko."); return; }
+      if (data.imie.split(" ").length < 2) { setError(form.imie, "Podajcie imiona i nazwiska z zaproszenia."); return; }
       if (!data.obecnosc) { choice.querySelector(".field__error").textContent = "Zaznaczcie, czy będziecie."; choice.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+      if (osobyField) {
+        if (osobyField.hidden) data.osoby = "1";
+        else if (data.obecnosc === "tak" && !(Number(data.osoby) >= 2)) { setError(form.osoby, "Przy „Tak, będziemy” podajcie co najmniej 2 osoby."); return; }
+      }
       if (has(r.kod) && String(data.kod || "").trim().toUpperCase() !== String(r.kod).toUpperCase()) { setError(form.kod, "Kod z zaproszenia się nie zgadza."); return; }
       if (data.obecnosc === "nie") { delete data.osoby; delete data.dieta; delete data.nocleg; delete data.piosenka; delete data.towarzyszace; }
 
